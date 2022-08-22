@@ -8,7 +8,7 @@ import ConfirmDelete from './ConfirmDelete'
 import CreateForm from './CreateForm'
 import ProductApi from '../../apis/product_test'
 import ProductImageApi from '../../apis/product_test_images'
-// import getBase64 from '../../helpers/getBase64.js'
+import getBase64 from '../../helpers/getBase64.js'
 
 function ProductsPage(props) {
   const { actions, location, navigate } = props
@@ -74,21 +74,20 @@ function ProductsPage(props) {
         status: formData.status.value,
         tags: formData.tags.value,
         product_type: formData.product_type.value,
+        images: formData.images.value,
       }
 
-      const imagesFile = formData['images'].value
+      // const imagesFile = formData['images'].value
 
-      // let imagesBase64 = [] handle base64 frontend
+      // let test
 
       // if (imagesFile) {
       //   imagesFile.forEach((file) => {
-      //     imagesBase64.push(getBase64(file))
+      //     test = getBase64(file)
       //   })
       // }
-      // console.log('imagesBase64', imagesBase64)
 
       let res = null
-      let resImage = null
 
       if (created.id) {
         //update
@@ -97,13 +96,7 @@ function ProductsPage(props) {
       } else {
         //create
         res = await ProductApi.create(data)
-        const product_id = res?.data.product.id
-        console.log('product_id', product_id)
-        if (product_id && imagesFile) {
-          resImage = await ProductImageApi.create(product_id, imagesFile)
-        }
       }
-      console.log('resImage :>> ', resImage)
 
       if (!res.success) {
         throw res.error

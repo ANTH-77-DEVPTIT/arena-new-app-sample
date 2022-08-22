@@ -90,7 +90,7 @@ const create = async ({ shop, accessToken, data }) => {
     validateParams({ shop, accessToken, data })
     console.log('🚀 ~ file: product ~ data', data)
 
-    return await apiCaller({ shop, accessToken, endpoint: `products.json`, method: 'POST', data })
+    // return await apiCaller({ shop, accessToken, endpoint: `products.json`, method: 'POST', data })
   } catch (error) {
     throw error
   }

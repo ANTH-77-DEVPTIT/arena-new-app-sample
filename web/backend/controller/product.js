@@ -45,6 +45,7 @@ export default {
   },
 
   create: async (req, res) => {
+    console.log('req.files', req.files)
     try {
       const session = await verifyToken(req, res)
       const { shop, accessToken } = session
