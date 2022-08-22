@@ -20,6 +20,10 @@ export default function App(props) {
             label: 'Products',
             pathname: '/products',
           },
+          {
+            label: 'Products 1',
+            pathname: '/products_test',
+          },
         ]}
         secondaryActions={[
           {

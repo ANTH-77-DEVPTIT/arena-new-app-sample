@@ -68,14 +68,16 @@ function AppContainer(props) {
         <AppBridgeProvider>
           <QueryProvider>
             <NavigationMenu
-              navigationLinks={
-                [
-                  // {
-                  //   label: 'Home',
-                  //   destination: '/',
-                  // },
-                ]
-              }
+              navigationLinks={[
+                {
+                  label: 'Home',
+                  destination: '/',
+                },
+                {
+                  label: 'Products 1',
+                  destination: '/products_test',
+                },
+              ]}
             />
 
             <AppFullscreen isFullscreen={isFullscreen}>

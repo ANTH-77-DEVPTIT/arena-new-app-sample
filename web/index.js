@@ -22,6 +22,7 @@ import storeSettingRoute from './backend/routes/admin/store_setting.js'
 import productRoute from './backend/routes/admin/product.js'
 import billingRoute from './backend/routes/admin/billing.js'
 import submitionRoute from './backend/routes/admin/submition.js'
+import productImageRoute from './backend/routes/admin/product_image.js'
 
 const USE_ONLINE_TOKENS = false
 const TOP_LEVEL_OAUTH_COOKIE = 'shopify_top_level_oauth'
@@ -117,6 +118,7 @@ export async function createServer(
    */
   storeSettingRoute(app)
   productRoute(app)
+  productImageRoute(app)
   billingRoute(app)
   submitionRoute(app)
   // -------------------------------------------
@@ -175,11 +177,11 @@ export async function createServer(
 createServer().then(({ app }) =>
   app.listen(PORT, () => {
     console.log(``)
-    console.log(`++++++++++++++++++++++++++++++++++++`)
-    console.log(`+                                  +`)
-    console.log(`+   Welcome to ArenaCommerce App   +`)
-    console.log(`+                                  +`)
-    console.log(`++++++++++++++++++++++++++++++++++++`)
+    console.log(`+++++++++++++++++Abel+++++++++++++++++++`)
+    console.log(`+                                      +`)
+    console.log(`+     Welcome to ArenaCommerce App     +`)
+    console.log(`+                                      +`)
+    console.log(`++++++++++++++++Truong++++++++++++++++++`)
     console.log(``)
     console.log(`[SERVE] ${process.env.HOST}/install`)
     console.log(``)

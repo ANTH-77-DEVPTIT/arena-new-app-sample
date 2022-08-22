@@ -51,12 +51,26 @@ const create = async ({ shop, accessToken, product_id, data }) => {
   try {
     validateParams({ shop, accessToken, product_id, data })
 
+    let image = {}
+
+    //upload moi 1 anh.
+    if (data) {
+      for (let i = 0; i < data.length; i++) {
+        image = {
+          ...image,
+          product_id: product_id,
+          attachment: data[i].buffer?.toString('base64'),
+          filename: data[i].originalname,
+        }
+      }
+    }
+
     return await apiCaller({
       shop,
       accessToken,
       endpoint: `products/${product_id}/images.json`,
       method: 'POST',
-      data,
+      data: { image: image },
     })
   } catch (error) {
     throw error

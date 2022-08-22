@@ -1,24 +1,14 @@
-import {
-  Badge,
-  Button,
-  Card,
-  DataTable,
-  Pagination,
-  Stack,
-  Tabs,
-  Thumbnail,
-  Tooltip,
-} from '@shopify/polaris'
-import { useEffect, useState } from 'react'
-import ProductApi from '../../apis/product'
-import AppHeader from '../../components/AppHeader'
-import { ImagesMajor, EditMinor, DeleteMinor, ViewMinor } from '@shopify/polaris-icons'
-import CreateForm from './CreateForm'
-import ConfirmDelete from './ConfirmDelete'
-import Table from './Table'
+import { Card, Pagination, Stack } from '@shopify/polaris'
+import React, { useState } from 'react'
+import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import MySkeletonPage from '../../components/MySkeletonPage'
-import { generateVariantsFromOptions } from './actions'
+import AppHeader from '../../components/AppHeader'
+import Table from './Table'
+import ConfirmDelete from './ConfirmDelete'
+import CreateForm from './CreateForm'
+import ProductApi from '../../apis/product_test'
+import ProductImageApi from '../../apis/product_test_images'
+// import getBase64 from '../../helpers/getBase64.js'
 
 function ProductsPage(props) {
   const { actions, location, navigate } = props
@@ -30,12 +20,14 @@ function ProductsPage(props) {
   const [created, setCreated] = useState(null)
   const [deleted, setDeleted] = useState(null)
 
-  const getProducts = async (query) => {
+  const getProducts = async () => {
     try {
       actions.showAppLoading()
 
-      let res = await ProductApi.find(query)
-      if (!res.success) throw res.error
+      let res = await ProductApi.find()
+      if (!res.success) {
+        throw res.error
+      }
 
       setProducts(res.data)
     } catch (error) {
@@ -47,15 +39,17 @@ function ProductsPage(props) {
   }
 
   useEffect(() => {
-    getProducts(location.search)
-  }, [location.search])
+    getProducts()
+  }, [])
 
   const getProductsCount = async () => {
     try {
       actions.showAppLoading()
 
       let res = await ProductApi.count()
-      if (!res.success) throw res.error
+      if (!res.success) {
+        throw res.error
+      }
 
       setCount(res.data.count)
     } catch (error) {
@@ -72,46 +66,53 @@ function ProductsPage(props) {
 
   const handleSubmit = async (formData) => {
     try {
-      actions.showAppLoading()
-
-      let options = [...formData['options']]
-      options = options
-        .filter((item) => item.name.value && item.values.value)
-        .map((item) => ({
-          name: item.name.value,
-          values: item['values'].value.split(',').filter((item) => item),
-        }))
-
+      // actions.showAppLoading()
+      console.log('🚀 ~ file: index.jsx ~ line 66 ~ handleSubmit ~ formData', formData)
       let data = {
         title: formData.title.value,
         body_html: formData.body_html.value,
+        status: formData.status.value,
+        tags: formData.tags.value,
+        product_type: formData.product_type.value,
       }
-      if (options.length) {
-        data.options = options
-        data.variants = generateVariantsFromOptions(options)
-      }
-      console.log('options :>> ', options)
 
-      console.log('data :>> ', data)
+      const imagesFile = formData['images'].value
+
+      // let imagesBase64 = [] handle base64 frontend
+
+      // if (imagesFile) {
+      //   imagesFile.forEach((file) => {
+      //     imagesBase64.push(getBase64(file))
+      //   })
+      // }
+      // console.log('imagesBase64', imagesBase64)
 
       let res = null
+      let resImage = null
 
       if (created.id) {
-        // update
+        //update
         res = await ProductApi.update(created.id, data)
+        console.log('🚀 ~ data update ~', res)
       } else {
-        // create
+        //create
         res = await ProductApi.create(data)
+        const product_id = res?.data.product.id
+        console.log('product_id', product_id)
+        if (product_id && imagesFile) {
+          resImage = await ProductImageApi.create(product_id, imagesFile)
+        }
       }
-      if (!res.success) throw res.error
+      console.log('resImage :>> ', resImage)
 
-      console.log('res.data :>> ', res.data)
+      if (!res.success) {
+        throw res.error
+      }
 
-      actions.showNotify({ message: created.id ? 'Saved' : 'Created' })
+      actions.showNotify({ message: created?.id ? 'Saved' : 'Created' })
 
       setCreated(null)
-
-      getProducts(location.search)
+      getProducts()
     } catch (error) {
       console.log(error)
       actions.showNotify({ message: error.message, error: true })
@@ -120,16 +121,18 @@ function ProductsPage(props) {
     }
   }
 
-  const handleDelete = async (deleted) => {
+  const handleDelete = async () => {
     try {
       actions.showAppLoading()
 
       let res = await ProductApi.delete(deleted.id)
-      if (!res.success) throw res.error
+      if (!res.success) {
+        throw res.error
+      }
 
       actions.showNotify({ message: 'Deleted' })
 
-      getProducts(location.search)
+      getProducts()
     } catch (error) {
       console.log(error)
       actions.showNotify({ message: error.message, error: true })
@@ -153,7 +156,7 @@ function ProductsPage(props) {
     <Stack vertical alignment="fill">
       <AppHeader
         {...props}
-        title="Products"
+        title="Products Page"
         primaryActions={[
           {
             label: 'Add product',
@@ -166,7 +169,7 @@ function ProductsPage(props) {
 
       <Card>
         <Card.Section>
-          <div>Total items: {count || 'loading..'}</div>
+          <div>Total items: {count || 'loading...'}</div>
         </Card.Section>
         <Table
           {...props}

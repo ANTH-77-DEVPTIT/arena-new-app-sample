@@ -88,6 +88,7 @@ const findById = async ({ shop, accessToken, id }) => {
 const create = async ({ shop, accessToken, data }) => {
   try {
     validateParams({ shop, accessToken, data })
+    console.log('🚀 ~ file: product ~ data', data)
 
     return await apiCaller({ shop, accessToken, endpoint: `products.json`, method: 'POST', data })
   } catch (error) {
