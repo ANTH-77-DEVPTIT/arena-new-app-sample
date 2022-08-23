@@ -75,21 +75,12 @@ function ProductsPage(props) {
         tags: formData.tags.value,
         product_type: formData.product_type.value,
         images: formData.images.value,
+        imagesURL: formData.imagesURL.value,
       }
-
-      // const imagesFile = formData['images'].value
-
-      // let test
-
-      // if (imagesFile) {
-      //   imagesFile.forEach((file) => {
-      //     test = getBase64(file)
-      //   })
-      // }
 
       let res = null
 
-      if (created.id) {
+      if (created?.id) {
         //update
         res = await ProductApi.update(created.id, data)
         console.log('🚀 ~ data update ~', res)

@@ -85,12 +85,31 @@ const findById = async ({ shop, accessToken, id }) => {
   }
 }
 
-const create = async ({ shop, accessToken, data }) => {
+const create = async ({ shop, accessToken, data, files }) => {
   try {
-    validateParams({ shop, accessToken, data })
-    console.log('🚀 ~ file: product ~ data', data)
+    validateParams({ shop, accessToken, data, files })
+    console.log('🚀 ~ file: product.js ~ line 91 ~ create ~ data', data)
 
-    // return await apiCaller({ shop, accessToken, endpoint: `products.json`, method: 'POST', data })
+    //handle Image upload files
+    let images = []
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        images.push({
+          attachment: files[i].buffer?.toString('base64'),
+        })
+      }
+    }
+    //handle image upload url
+    if (data.imagesURL) {
+      images.push({
+        src: data.imagesURL,
+      })
+      delete data.imagesURL
+    }
+
+    data = { product: { ...data, images: images } }
+
+    return await apiCaller({ shop, accessToken, endpoint: `products.json`, method: 'POST', data })
   } catch (error) {
     throw error
   }

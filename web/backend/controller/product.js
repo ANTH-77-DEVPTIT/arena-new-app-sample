@@ -45,12 +45,16 @@ export default {
   },
 
   create: async (req, res) => {
-    console.log('req.files', req.files)
     try {
       const session = await verifyToken(req, res)
       const { shop, accessToken } = session
 
-      const data = await ProductMiddleware.create({ shop, accessToken, data: req.body })
+      const data = await ProductMiddleware.create({
+        shop,
+        accessToken,
+        data: req.body,
+        files: req.files,
+      })
 
       return ResponseHandler.success(res, data)
     } catch (error) {

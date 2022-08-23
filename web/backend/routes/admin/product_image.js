@@ -8,7 +8,7 @@ export default function productImageRoute(app) {
   app.post(`/api/products/:product_id/images`, MulterUpload.array('images', 250), Controller.create)
   app.put(
     `/api/products/:product_id/images/:image_id`,
-    MulterUpload.array('files', 250),
+    MulterUpload.array('images', 250),
     Controller.update,
   )
   app.delete(`api/products/:product_id/images/:image_id`, Controller.delete)

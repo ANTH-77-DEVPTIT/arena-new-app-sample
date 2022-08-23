@@ -6,6 +6,6 @@ export default function productRoute(app) {
   app.get('/api/products', Controller.find)
   app.get('/api/products/:id', Controller.findById)
   app.post('/api/products', MulterUpload.array('images', 250), Controller.create)
-  app.put('/api/products/:id', Controller.update)
+  app.put('/api/products/:id', MulterUpload.array('images', 250), Controller.update)
   app.delete('/api/products/:id', Controller.delete)
 }

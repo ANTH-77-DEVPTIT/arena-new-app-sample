@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types'
-import { Button, Card, Stack } from '@shopify/polaris'
+import { Button, Card, Checkbox, DisplayText, Stack } from '@shopify/polaris'
 import { useEffect, useState } from 'react'
 import AppHeader from '../../components/AppHeader'
 import FormValidate from '../../helpers/formValidate'
 import FormControl from '../../components/FormControl'
+import OptionForm from './OptionForm'
 
 CreateForm.propTypes = {
   created: PropTypes.object,
@@ -91,7 +92,55 @@ const initialFormData = {
     validate: {},
     allowMultiple: true,
   },
+  imagesURL: {
+    type: 'text',
+    label: 'Image, YouTube, or Video URL',
+    value: '',
+    originValue: [],
+    error: '',
+    validate: {},
+  },
 }
+
+//option no cung la cai form thoi
+const optionFormData = {
+  name: {
+    type: 'text',
+    label: 'Option name',
+    value: '',
+    error: '',
+    required: true,
+    validate: {
+      trim: true,
+      required: [true, 'Required!'],
+      minlength: [2, 'Too short!'],
+      maxlength: [200, 'Too long!'],
+    },
+  },
+  values: {
+    type: 'text',
+    label: 'Option values',
+    value: '',
+    error: '',
+    required: true,
+    validate: {
+      trim: true,
+      required: [true, 'Required!'],
+      minlength: [1, 'Too short!'],
+      maxlength: [100, 'Too long!'],
+    },
+  },
+}
+
+let initOptionFormData = Array.from([
+  // { name: 'Size', values: 's,m,l' },
+  // { name: 'Color', values: 'red,black,yellow' },
+  // { name: 'Material', values: 'gold,sliver' },
+  { name: '', values: '' },
+]).map((item) => ({
+  name: { ...optionFormData.name, value: item.name },
+  values: { ...optionFormData.values, value: item.values },
+}))
 
 function CreateForm(props) {
   const { actions, created, onDiscard, onSubmit } = props
@@ -106,7 +155,7 @@ function CreateForm(props) {
     let _formData = JSON.parse(JSON.stringify(initialFormData))
 
     /**
-     * test
+     * test nha
      */
     _formData.title.value = `Sample product`
     _formData.body_html.value = `Sample product`
@@ -200,13 +249,83 @@ function CreateForm(props) {
                 />
               </Stack.Item>
             </Stack>
-            <Stack.Item>
-              <FormControl
-                {...formData['images']}
-                onChange={(value) => handleChange('images', value)}
-              />
-            </Stack.Item>
           </Stack>
+        </Card>
+        <Card sectioned>
+          <Stack vertical>
+            <Stack.Item>
+              {created?.id &&
+                created.images.map((image, index) => (
+                  <img
+                    key={index}
+                    style={{ width: '150px', height: 'auto', margin: '10px' }}
+                    src={image.src}
+                    alt="HIHI"
+                  />
+                ))}
+            </Stack.Item>
+            <Stack>
+              <Stack.Item fill>
+                <FormControl
+                  {...formData['images']}
+                  onChange={(value) => handleChange('images', value)}
+                />
+              </Stack.Item>
+              <Stack.Item fill>
+                <FormControl
+                  {...formData['imagesURL']}
+                  placeholder="Enter your URL..."
+                  onChange={(value) => handleChange('imagesURL', value)}
+                />
+              </Stack.Item>
+            </Stack>
+          </Stack>
+        </Card>
+      </Stack.Item>
+
+      <Stack.Item>
+        <Card>
+          <Card.Section>
+            <Stack vertical>
+              <DisplayText size="small">Options</DisplayText>
+              <Checkbox
+                label="This product has options, like size or color"
+                checked={Boolean(formData['options'])}
+                onChange={() => {
+                  let _formData = JSON.parse(JSON.stringify(formData))
+                  if (formData['options']) {
+                    _formData['options'] = null
+                  } else {
+                    _formData['options'] = initOptionFormData
+                  }
+                  setFormData(_formData)
+                }}
+              />
+            </Stack>
+          </Card.Section>
+          {formData['options'] &&
+            formData['options'].map((item, index) => (
+              <Card.Section key={index}>
+                <OptionForm
+                  formData={item}
+                  onChange={(value) => {
+                    let _formData = JSON.parse(JSON.stringify(formData))
+                    _formData['options'][index] = value
+
+                    console.log('_formData :>> ', _formData)
+
+                    // check has empty option> khúc này kiểm tra nếu _formData['options'] mà không có giá trị thì lấy giá trị mặc định bên trên cho nó
+                    if (!_formData['options'].filter((item) => item['name'].value === '').length) {
+                      _formData['options'].push({ ...optionFormData })
+                    }
+
+                    console.log('_formData ben dưới :>> ', _formData)
+
+                    setFormData(_formData)
+                  }}
+                />
+              </Card.Section>
+            ))}
         </Card>
       </Stack.Item>
 
