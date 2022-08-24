@@ -5,7 +5,7 @@ export default function productImageRoute(app) {
   app.get('/api/products/:product_id/images/count', Controller.count)
   app.get('/api/products/:product_id/images', Controller.find)
   app.get(`/api/products/:product_id/images/:image_id`, Controller.findById)
-  app.post(`/api/products/:product_id/images`, MulterUpload.array('images', 250), Controller.create)
+  app.post(`/api/upload`, MulterUpload.array('images', 250), Controller.create)
   app.put(
     `/api/products/:product_id/images/:image_id`,
     MulterUpload.array('images', 250),

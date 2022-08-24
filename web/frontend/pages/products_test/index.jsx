@@ -8,7 +8,7 @@ import ConfirmDelete from './ConfirmDelete'
 import CreateForm from './CreateForm'
 import ProductApi from '../../apis/product_test'
 import ProductImageApi from '../../apis/product_test_images'
-import getBase64 from '../../helpers/getBase64.js'
+import { generateVariantsFromOptions } from './actions.js'
 
 function ProductsPage(props) {
   const { actions, location, navigate } = props
@@ -65,18 +65,48 @@ function ProductsPage(props) {
   }, [])
 
   const handleSubmit = async (formData) => {
+    console.log('🚀 ~  ~ formData', formData)
     try {
-      // actions.showAppLoading()
-      console.log('🚀 ~ file: index.jsx ~ line 66 ~ handleSubmit ~ formData', formData)
+      actions.showAppLoading()
+
       let data = {
         title: formData.title.value,
         body_html: formData.body_html.value,
         status: formData.status.value,
         tags: formData.tags.value,
         product_type: formData.product_type.value,
-        images: formData.images.value,
-        imagesURL: formData.imagesURL.value,
       }
+
+      let options = [...formData['options']]
+      options = options
+        .filter((item) => item.name.value && item.values.value)
+        .map((item) => ({
+          name: item.name.value,
+          values: item['values'].value.split(',').filter((item) => item),
+        }))
+
+      if (options.length) {
+        data.options = options
+        data.variants = generateVariantsFromOptions(options)
+      }
+
+      let imagesFile = formData.images.value
+      let images = null
+      if (imagesFile) {
+        images = await ProductImageApi.create(imagesFile)
+      }
+
+      if (images) {
+        data.images = images.data
+      }
+
+      if (formData['imagesURL'].value) {
+        data.images.push({
+          src: formData['imagesURL'].value,
+        })
+      }
+
+      console.log('data', data)
 
       let res = null
 

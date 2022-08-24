@@ -12,13 +12,13 @@ const findById = async (product_id, image_id) => {
   return await apiCaller(`/api/products/${product_id}/images/${image_id}`)
 }
 
-const create = async (product_id, images) => {
+const create = async (images) => {
   console.log('🚀 ~ images', images)
   const formData = new FormData()
 
-  images.forEach((item) => formData.append('images', item))
+  images?.forEach((item) => formData.append('images', item))
 
-  return await apiCaller(`/api/products/${product_id}/images`, 'POST', formData)
+  return await apiCaller(`/api/upload`, 'POST', formData)
 }
 
 const update = async (product_id, image_id, data) => {

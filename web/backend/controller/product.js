@@ -53,7 +53,6 @@ export default {
         shop,
         accessToken,
         data: req.body,
-        files: req.files,
       })
 
       return ResponseHandler.success(res, data)

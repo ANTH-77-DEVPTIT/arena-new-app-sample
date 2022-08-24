@@ -50,13 +50,11 @@ export default {
   create: async (req, res) => {
     try {
       const session = await verifyToken(req, res)
-      const { product_id } = req.params
       const { shop, accessToken } = session
 
       const data = await ProductImageMiddleware.create({
         shop,
         accessToken,
-        product_id,
         data: req.files,
       })
 

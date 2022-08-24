@@ -100,6 +100,8 @@ const initialFormData = {
     error: '',
     validate: {},
   },
+
+  options: null,
 }
 
 //option no cung la cai form thoi
@@ -133,10 +135,10 @@ const optionFormData = {
 }
 
 let initOptionFormData = Array.from([
-  // { name: 'Size', values: 's,m,l' },
+  { name: 'Size', values: 's,m,l' },
   // { name: 'Color', values: 'red,black,yellow' },
   // { name: 'Material', values: 'gold,sliver' },
-  { name: '', values: '' },
+  // { name: '', values: '' },
 ]).map((item) => ({
   name: { ...optionFormData.name, value: item.name },
   values: { ...optionFormData.values, value: item.values },
@@ -148,7 +150,7 @@ function CreateForm(props) {
   const [formData, setFormData] = useState(initialFormData)
 
   useEffect(() => {
-    console.log('formData change:>> ', formData)
+    console.log('111: formData change:>> ', formData)
   }, [formData])
 
   useEffect(() => {
@@ -157,7 +159,7 @@ function CreateForm(props) {
     /**
      * test nha
      */
-    _formData.title.value = `Sample product`
+    _formData.title.value = `Sample product - ${new Date().toString()}`
     _formData.body_html.value = `Sample product`
     _formData.product_type.value = `Sample product`
     _formData.tags.value = `Sample product`
@@ -173,8 +175,6 @@ function CreateForm(props) {
 
     setFormData(_formData)
   }, [])
-
-  console.log('created', created)
 
   const handleChange = (name, value) => {
     let _formData = JSON.parse(JSON.stringify(formData))
@@ -290,9 +290,17 @@ function CreateForm(props) {
               <DisplayText size="small">Options</DisplayText>
               <Checkbox
                 label="This product has options, like size or color"
-                checked={Boolean(formData['options'])}
+                checked={Boolean(formData['options'])} //empty
                 onChange={() => {
+                  // if (!formData['options']) {
+                  //   //options ban dau laf null => falsy =>!falsy =>  truthy
+                  //   setFormData((prevState) => ({
+                  //     ...prevState,
+                  //     options: initOptionFormData,
+                  //   }))
+                  // }
                   let _formData = JSON.parse(JSON.stringify(formData))
+                  Array.from(['images']).forEach((key) => (_formData[key] = formData[key]))
                   if (formData['options']) {
                     _formData['options'] = null
                   } else {
@@ -309,17 +317,25 @@ function CreateForm(props) {
                 <OptionForm
                   formData={item}
                   onChange={(value) => {
+                    // let _formData = JSON.parse(JSON.stringify(formData))
+                    // _formData['options'][index] = value
+                    // // check has empty option> khúc này kiểm tra nếu _formData['options'] mà không có giá trị thì lấy giá trị mặc định bên trên cho nó
+                    // if (!_formData['options'].filter((item) => item['name'].value === '').length) {
+                    //   _formData['options'].push({ ...optionFormData })
+                    // }
+                    // setFormData((prevState) => ({
+                    //   ...prevState,
+                    //   options: initOptionFormData,
+                    // }))
+
                     let _formData = JSON.parse(JSON.stringify(formData))
+                    Array.from(['images']).forEach((key) => (_formData[key] = formData[key]))
                     _formData['options'][index] = value
 
-                    console.log('_formData :>> ', _formData)
-
-                    // check has empty option> khúc này kiểm tra nếu _formData['options'] mà không có giá trị thì lấy giá trị mặc định bên trên cho nó
+                    // check has empty option
                     if (!_formData['options'].filter((item) => item['name'].value === '').length) {
-                      _formData['options'].push({ ...optionFormData })
+                      _formData['options'].push({ ...optionFormData }) //nếu chưa có options nào thì đưa optionsFormData mặc định vào options trong _formData
                     }
-
-                    console.log('_formData ben dưới :>> ', _formData)
 
                     setFormData(_formData)
                   }}

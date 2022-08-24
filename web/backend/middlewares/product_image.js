@@ -47,31 +47,20 @@ const findById = async ({ shop, accessToken, product_id, image_id }) => {
   }
 }
 
-const create = async ({ shop, accessToken, product_id, data }) => {
+const create = async ({ shop, accessToken, data }) => {
   try {
-    validateParams({ shop, accessToken, product_id, data })
+    validateParams({ shop, accessToken, data })
 
-    let image = {}
+    let images = []
 
-    //upload moi 1 anh.
     if (data) {
-      for (let i = 0; i < data.length; i++) {
-        image = {
-          ...image,
-          product_id: product_id,
-          attachment: data[i].buffer?.toString('base64'),
-          filename: data[i].originalname,
-        }
-      }
+      data.forEach((file) =>
+        images.push({
+          attachment: file.buffer.toString('base64'),
+        }),
+      )
     }
-
-    return await apiCaller({
-      shop,
-      accessToken,
-      endpoint: `products/${product_id}/images.json`,
-      method: 'POST',
-      data: { image: image },
-    })
+    return images
   } catch (error) {
     throw error
   }

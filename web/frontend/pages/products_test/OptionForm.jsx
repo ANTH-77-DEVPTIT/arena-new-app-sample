@@ -15,7 +15,6 @@ OptionForm.defaultProps = {
 
 function OptionForm(props) {
   const { formData, onChange } = props
-  console.log('🚀 ~ file: OptionForm.jsx ~ line 18 ~ OptionForm ~ props', props)
 
   let valuesList = formData['values'].value.split(',').filter((item) => item)
   valuesList.push('')

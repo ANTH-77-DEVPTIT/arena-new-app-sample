@@ -85,29 +85,32 @@ const findById = async ({ shop, accessToken, id }) => {
   }
 }
 
-const create = async ({ shop, accessToken, data, files }) => {
+const create = async ({ shop, accessToken, data }) => {
   try {
-    validateParams({ shop, accessToken, data, files })
+    validateParams({ shop, accessToken, data })
     console.log('🚀 ~ file: product.js ~ line 91 ~ create ~ data', data)
 
-    //handle Image upload files
-    let images = []
-    if (files) {
-      for (let i = 0; i < files.length; i++) {
-        images.push({
-          attachment: files[i].buffer?.toString('base64'),
-        })
-      }
-    }
-    //handle image upload url
-    if (data.imagesURL) {
-      images.push({
-        src: data.imagesURL,
-      })
-      delete data.imagesURL
-    }
+    // //handle Image upload files
+    // let images = []
+    // if (files) {
+    //   for (let i = 0; i < files.length; i++) {
+    //     images.push({
+    //       attachment: files[i].buffer?.toString('base64'),
+    //     })
+    //   }
+    // }
+    // //handle image upload url
+    // if (data.imagesURL) {
+    //   images.push({
+    //     src: data.imagesURL,
+    //   })
+    //   delete data.imagesURL
+    // }
 
-    data = { product: { ...data, images: images } }
+    // console.log('data :>> ', data.title)
+    // console.log('data :>> ', data.options.split(','))
+    // console.log('data :>> ', data.variants.split(','))
+    // data = { product: { ...data, images: images } }
 
     return await apiCaller({ shop, accessToken, endpoint: `products.json`, method: 'POST', data })
   } catch (error) {
