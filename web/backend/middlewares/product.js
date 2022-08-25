@@ -90,6 +90,8 @@ const create = async ({ shop, accessToken, data }) => {
     validateParams({ shop, accessToken, data })
     console.log('🚀 ~ file: product.js ~ line 91 ~ create ~ data', data)
 
+    console.log('data.images :>> ', data.images)
+
     // //handle Image upload files
     // let images = []
     // if (files) {
@@ -99,7 +101,7 @@ const create = async ({ shop, accessToken, data }) => {
     //     })
     //   }
     // }
-    // //handle image upload url
+    // //handle image upload url hihi
     // if (data.imagesURL) {
     //   images.push({
     //     src: data.imagesURL,
@@ -119,8 +121,11 @@ const create = async ({ shop, accessToken, data }) => {
 }
 
 const update = async ({ shop, accessToken, id, data }) => {
+  console.log('🚀 ~ file: product.js ~ line 124 ~ update ~ id', id)
   try {
     validateParams({ shop, accessToken, id, data })
+
+    console.log('data', data)
 
     return await apiCaller({
       shop,

@@ -19,6 +19,8 @@ const create = async (data) => {
   //   data['images'].forEach((item) => formData.append('images', item))
   // }
 
+  console.log('data :>> ', data)
+
   return await apiCaller(`/api/products`, 'POST', { product: data })
   // return await apiCaller(`/api/products`, 'POST', formData)
 }

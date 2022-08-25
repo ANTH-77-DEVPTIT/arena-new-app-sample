@@ -65,7 +65,7 @@ function ProductsPage(props) {
   }, [])
 
   const handleSubmit = async (formData) => {
-    console.log('🚀 ~  ~ formData', formData)
+    console.log('🚀 ~ file: index.jsx ~ line 68 ~ handleSubmit ~ formData', formData)
     try {
       actions.showAppLoading()
 
@@ -75,6 +75,8 @@ function ProductsPage(props) {
         status: formData.status.value,
         tags: formData.tags.value,
         product_type: formData.product_type.value,
+        metafields_global_title_tag: formData.metafields_global_title_tag.value,
+        metafields_global_description_tag: formData.metafields_global_description_tag.value,
       }
 
       let options = [...formData['options']]
@@ -96,17 +98,25 @@ function ProductsPage(props) {
         images = await ProductImageApi.create(imagesFile)
       }
 
-      if (images) {
-        data.images = images.data
+      //handleUploadImage when create/update product
+      if (formData['images'].value.length) {
+        let images = await ProductImageApi.create(imagesFile)
+        if (!images.success) {
+          actions.showNotify({ error: true, message: images.error.message })
+        } else {
+          data.images = [...images.data, ...formData['images'].originValue]
+        }
+      } else if (formData['images'].originValue.length) {
+        data.images = formData['images'].originValue
       }
 
+      //handle create imageURL
+      if (formData['imagesURL'].originValue) {
+        data.images = [...data.images, ...formData['imagesURL'].originValue]
+      }
       if (formData['imagesURL'].value) {
-        data.images.push({
-          src: formData['imagesURL'].value,
-        })
+        data.images = [...data.images, { src: formData['imagesURL'].value }]
       }
-
-      console.log('data', data)
 
       let res = null
 

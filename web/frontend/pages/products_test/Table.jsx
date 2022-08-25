@@ -42,6 +42,7 @@ function Table(props) {
         <Stack vertical spacing="extraTight">
           <Stack.Item>Vendor: {item.vendor}</Stack.Item>
           <Stack.Item>Product type: {item.product_type}</Stack.Item>
+          <Stack.Item>Description: {item.body_html}</Stack.Item>
         </Stack>
       </div>,
       <Popover

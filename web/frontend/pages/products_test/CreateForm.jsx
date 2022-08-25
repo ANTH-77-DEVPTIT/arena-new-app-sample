@@ -1,6 +1,14 @@
 import PropTypes from 'prop-types'
-import { Button, Card, Checkbox, DisplayText, Stack } from '@shopify/polaris'
-import { useEffect, useState } from 'react'
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  Checkbox,
+  DisplayText,
+  Stack,
+  TextField,
+} from '@shopify/polaris'
+import { useEffect, useState, useRef } from 'react'
 import AppHeader from '../../components/AppHeader'
 import FormValidate from '../../helpers/formValidate'
 import FormControl from '../../components/FormControl'
@@ -23,6 +31,7 @@ const initialFormData = {
     type: 'text',
     label: 'Title',
     value: '',
+    placeholder: 'Ao thun ngan tay',
     error: '',
     required: true,
     validate: {
@@ -78,10 +87,6 @@ const initialFormData = {
     label: 'Tags',
     value: '',
     error: '',
-    validate: {
-      minlength: [2, 'Too short!'],
-      maxlength: [255, 'Too long!'],
-    },
   },
   images: {
     type: 'file',
@@ -96,12 +101,25 @@ const initialFormData = {
     type: 'text',
     label: 'Image, YouTube, or Video URL',
     value: '',
+    placeholder: 'Enter your URL...',
+    valueShow: [],
     originValue: [],
     error: '',
     validate: {},
+    focused: false,
   },
-
-  options: null,
+  metafields_global_title_tag: {
+    type: 'text',
+    label: 'Title SEO',
+    value: '',
+    error: '',
+  },
+  metafields_global_description_tag: {
+    type: 'text',
+    label: 'Description SEO',
+    value: '',
+    error: '',
+  },
 }
 
 //option no cung la cai form thoi
@@ -148,6 +166,7 @@ function CreateForm(props) {
   const { actions, created, onDiscard, onSubmit } = props
 
   const [formData, setFormData] = useState(initialFormData)
+  const [showImageURL, setShowImageURL] = useState(false)
 
   useEffect(() => {
     console.log('111: formData change:>> ', formData)
@@ -158,16 +177,26 @@ function CreateForm(props) {
 
     /**
      * test nha
-     */
+     **/
     _formData.title.value = `Sample product - ${new Date().toString()}`
     _formData.body_html.value = `Sample product`
     _formData.product_type.value = `Sample product`
     _formData.tags.value = `Sample product`
+    _formData.imagesURL.value =
+      'https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&w=1000&q=80'
+    _formData.metafields_global_title_tag.value = 'Title SEO'
+    _formData.metafields_global_description_tag.value = 'Description SEO nhe'
 
     if (created.id) {
-      Array.from(['title', 'body_html', 'tags', 'product_type', 'status']).map(
-        (key) => (_formData[key] = { ..._formData[key], value: created[key] || '' }),
-      )
+      Array.from([
+        'title',
+        'body_html',
+        'tags',
+        'product_type',
+        'status',
+        'metafields_global_title_tag',
+        'metafields_global_description_tag',
+      ]).map((key) => (_formData[key] = { ..._formData[key], value: created[key] || '' }))
       Array.from(['images']).map(
         (key) => (_formData[key] = { ..._formData[key], originValue: created[key] || [] }),
       )
@@ -176,10 +205,34 @@ function CreateForm(props) {
     setFormData(_formData)
   }, [])
 
+  const handleImageURL = () => {
+    setFormData({
+      ...formData,
+      imagesURL: {
+        ...formData['imagesURL'],
+        originValue: [...formData['imagesURL'].originValue, { src: formData['imagesURL'].value }],
+        valueShow: [...formData['imagesURL'].valueShow, formData['imagesURL'].value],
+        value: '',
+        focused: true,
+      },
+    })
+    setShowImageURL(true)
+  }
+
   const handleChange = (name, value) => {
     let _formData = JSON.parse(JSON.stringify(formData))
     Array.from(['images']).forEach((key) => (_formData[key] = formData[key]))
-    _formData[name] = { ..._formData[name], value, error: '' }
+
+    if (name === 'imagesURL') {
+      _formData['imagesURL'] = {
+        ..._formData['imagesURL'],
+        value,
+        error: '',
+      }
+    } else {
+      _formData[name] = { ..._formData[name], value, error: '' }
+    }
+
     setFormData(_formData)
   }
 
@@ -217,8 +270,7 @@ function CreateForm(props) {
             <Stack>
               <Stack.Item fill>
                 <FormControl
-                  {...formData.title}
-                  placeholder="Ao thun ngan tay"
+                  {...formData['title']}
                   onChange={(value) => handleChange('title', value)}
                 />
               </Stack.Item>
@@ -258,7 +310,7 @@ function CreateForm(props) {
                 created.images.map((image, index) => (
                   <img
                     key={index}
-                    style={{ width: '150px', height: 'auto', margin: '10px' }}
+                    style={{ width: '150px', height: 'auto', margin: '10px', borderRadius: '5px' }}
                     src={image.src}
                     alt="HIHI"
                   />
@@ -272,14 +324,63 @@ function CreateForm(props) {
                 />
               </Stack.Item>
               <Stack.Item fill>
-                <FormControl
-                  {...formData['imagesURL']}
-                  placeholder="Enter your URL..."
-                  onChange={(value) => handleChange('imagesURL', value)}
-                />
+                <Stack vertical alignment="fill">
+                  <Stack.Item fill>
+                    <ButtonGroup segmented>
+                      <FormControl
+                        {...formData['imagesURL']}
+                        onChange={(value) => handleChange('imagesURL', value)}
+                      />
+                      <div style={{ marginTop: '23px', marginLeft: '20px' }}>
+                        <Button plain onClick={handleImageURL}>
+                          Show hàng!
+                        </Button>
+                      </div>
+                    </ButtonGroup>
+                  </Stack.Item>
+                  {formData['imagesURL'].valueShow && showImageURL && (
+                    <Stack.Item>
+                      {formData['imagesURL'].valueShow.map((image, index) => (
+                        <img
+                          key={index}
+                          style={{
+                            width: '80px',
+                            height: 'auto',
+                            borderRadius: '5px',
+                            marginRight: '10px',
+                          }}
+                          src={image}
+                          alt="HIHI"
+                        />
+                      ))}
+                    </Stack.Item>
+                  )}
+                </Stack>
               </Stack.Item>
             </Stack>
           </Stack>
+        </Card>
+      </Stack.Item>
+
+      <Stack.Item>
+        <Card>
+          <Card.Section>
+            <DisplayText size="small">Seo</DisplayText>
+            <Stack>
+              <Stack.Item fill>
+                <FormControl
+                  {...formData['metafields_global_title_tag']}
+                  onChange={(value) => handleChange('metafields_global_title_tag', value)}
+                />
+              </Stack.Item>
+              <Stack.Item fill>
+                <FormControl
+                  {...formData['metafields_global_description_tag']}
+                  onChange={(value) => handleChange('metafields_global_description_tag', value)}
+                />
+              </Stack.Item>
+            </Stack>
+          </Card.Section>
         </Card>
       </Stack.Item>
 

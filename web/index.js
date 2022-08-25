@@ -91,8 +91,11 @@ export async function createServer(
   app.use(cors())
   app.use(cookieParser(Shopify.Context.API_SECRET_KEY))
 
-  app.use(bodyParser.json())
-  app.use(bodyParser.urlencoded({ extended: false }))
+  // app.use(bodyParser.json())
+  // app.use(bodyParser.urlencoded({ extended: false }))
+  //handle upload images voi dung lượng file được cho phép trong phạm bvi 10mb.
+  app.use(bodyParser.json({ limit: '10mb', extended: true }))
+  app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
 
   // -------------------------------------------
   /**
