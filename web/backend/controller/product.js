@@ -2,6 +2,8 @@ import verifyToken from '../auth/verifyToken.js'
 import ResponseHandler from '../helpers/responseHandler.js'
 import ProductMiddleware from '../middlewares/product.js'
 
+//khi BE nhận được request từ FE: nó sẽ verifyToken xác thực các sesssion toekn này. đúng hơn là xác minh lại cái mã authorization này có đúng không
+// nếu oke nó sẽ trả về một sesstion có mã accessToken để gửi lên cho thằng shopify admin api để xác thực lần nữa để lấy dữ liệu về BE và trả về FE.
 export default {
   count: async (req, res) => {
     try {

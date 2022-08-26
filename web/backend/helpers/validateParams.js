@@ -2,6 +2,8 @@
  *
  * @param {Object} data
  */
+//cái kiểm tra xác thực này là coi các fields như shop, accessToken hay endpoint, ... có giá trị hay không
+//nếu các fields này không có giá trị thì báo lỗi ngay
 const validateParams = (data) => {
   try {
     let keys = Object.keys(data)
