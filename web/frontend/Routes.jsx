@@ -37,6 +37,7 @@ export default function Routes({ pages, props }) {
   )
 }
 
+//handle routes co pathname va component
 function useRoutes(pages) {
   const routes = Object.keys(pages)
     .map((key) => {

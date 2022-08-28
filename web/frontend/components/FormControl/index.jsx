@@ -1,47 +1,132 @@
-import { RadioButton, Select, Stack, TextField } from '@shopify/polaris'
+import PropTypes from 'prop-types'
+import { Button, RadioButton, Select, Stack, TextField, Thumbnail } from '@shopify/polaris'
 import MyDropZoneMultiple from '../MyDropZoneMultiple'
 import MyDropZoneSingle from '../MyDropZoneSingle'
-import MultipleSelect from '../MultipleSelect'
+import { DeleteMinor } from '@shopify/polaris-icons'
+
+FormControl.propTypes = {
+  type: PropTypes.oneOf(['text', 'password', 'date', 'radio', 'select', 'file']),
+  label: PropTypes.string,
+  value: PropTypes.any,
+  originValue: PropTypes.any,
+  error: PropTypes.any,
+  onChange: PropTypes.func,
+  disabled: PropTypes.bool,
+  placeholder: PropTypes.string,
+  helpText: PropTypes.string,
+  autoFocus: PropTypes.bool,
+  options: PropTypes.array,
+  required: PropTypes.bool,
+  allowMultiple: PropTypes.bool,
+  onDeleteOriginValue: PropTypes.func,
+}
+
+FormControl.defaultProps = {
+  type: 'text',
+  label: '',
+  value: null,
+  originValue: undefined,
+  error: null,
+  onChange: () => null,
+  disabled: false,
+  placeholder: '',
+  helpText: '',
+  autoFocus: false,
+  options: [],
+  required: false,
+  allowMultiple: false,
+  onDeleteOriginValue: () => null,
+}
 
 function FormControl(props) {
-  let label = props.label ? (
-    <span>
-      {props.label}
-      {props.required ? <b style={{ color: 'rgb(220, 53, 69)' }}> *</b> : null}
-    </span>
-  ) : null
+  const {
+    type,
+    label,
+    value,
+    originValue,
+    error,
+    onChange,
+    disabled,
+    placeholder,
+    helpText,
+    autoFocus,
+    options,
+    required,
+    allowMultiple,
+    onDeleteOriginValue,
+  } = props
 
-  switch (props.type) {
+  let _label = required ? (
+    <span>
+      {label}
+      <b style={{ color: 'rgb(220, 53, 69)' }}>*</b>
+    </span>
+  ) : (
+    label
+  )
+
+  const renderPreview = (item) => {
+    return (
+      <div style={{ position: 'relative', display: 'inline' }}>
+        <div style={{ position: 'absolute', top: '0.5em', right: 0, zIndex: 1 }}>
+          <Button
+            icon={DeleteMinor}
+            size="slim"
+            plain
+            onClick={() => onDeleteOriginValue(item.src)}
+          />
+        </div>
+        <Thumbnail size="large" source={item.src} />
+      </div>
+    )
+  }
+
+  switch (type) {
     case 'file':
       return (
         <Stack vertical spacing="extraTight">
-          {label && <Stack.Item>{label}</Stack.Item>}
+          <Stack.Item>{_label}</Stack.Item>
+          {originValue !== undefined && (
+            <Stack spacing="extraTight">
+              {typeof originValue === 'string' && originValue !== '' ? (
+                <Stack.Item>{renderrenderPreviewPreview(originValue)}</Stack.Item>
+              ) : Array.isArray(originValue) && originValue.length > 0 ? (
+                originValue.map((item, index) => (
+                  <Stack.Item key={index}>{renderPreview(item)}</Stack.Item>
+                ))
+              ) : null}
+            </Stack>
+          )}
           <Stack.Item>
-            {props.allowMultiple ? (
-              <MyDropZoneMultiple {...props} files={props.value} />
+            {allowMultiple ? (
+              <MyDropZoneMultiple files={value} onChange={onChange} />
             ) : (
-              <MyDropZoneSingle {...props} file={props.value} />
+              <MyDropZoneSingle file={value} onChange={onChange} />
             )}
           </Stack.Item>
         </Stack>
       )
+      break
 
     case 'select':
-      return <Select {...props} label={label || ''} />
+      return (
+        <Select label={_label} options={options} onChange={onChange} value={value} error={error} />
+      )
+      break
 
     case 'radio':
       return (
         <Stack vertical spacing="extraTight">
-          {label && <Stack.Item>{label}</Stack.Item>}
+          <Stack.Item>{_label}</Stack.Item>
           <Stack.Item>
             <Stack>
-              {props.options?.length > 0 &&
-                props.options.map((item, index) => (
+              {options?.length > 0 &&
+                options.map((item, index) => (
                   <Stack.Item key={index}>
                     <RadioButton
                       label={item.label}
-                      checked={Boolean(item.value === value)}
-                      onChange={() => props.onChange?.(item.value)}
+                      checked={Boolean(item.value == value)}
+                      onChange={() => onChange(item.value)}
                     />
                   </Stack.Item>
                 ))}
@@ -49,13 +134,24 @@ function FormControl(props) {
           </Stack.Item>
         </Stack>
       )
-
-    case 'multiple-select':
-      return <MultipleSelect {...props} label={label || ''} />
+      break
 
     default:
       // text
-      return <TextField {...props} label={label || ''} />
+      return (
+        <TextField
+          type={type}
+          label={_label}
+          value={value}
+          error={error}
+          onChange={onChange}
+          disabled={Boolean(disabled)}
+          placeholder={placeholder}
+          helpText={helpText}
+          autoFocus={Boolean(autoFocus)}
+        />
+      )
+      break
   }
 }
 

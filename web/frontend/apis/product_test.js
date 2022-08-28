@@ -4,8 +4,8 @@ const count = async () => {
   return await apiCaller(`/api/products/count`)
 }
 
-const find = async () => {
-  return await apiCaller(`/api/products`)
+const find = async (query) => {
+  return await apiCaller(`/api/products${query || ''}`)
 }
 
 const create = async (data) => {

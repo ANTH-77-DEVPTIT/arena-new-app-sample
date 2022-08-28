@@ -137,7 +137,7 @@ const create = async ({ shop, accessToken, id }) => {
 
     switch (appBilling.id) {
       case 1001:
-        // application_charge
+        // application_charge: phi ung dung
         if (appBilling) {
           billingRes = await apiCaller({
             shop,

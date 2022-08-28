@@ -94,7 +94,7 @@ const initialFormData = {
     value: [],
     originValue: [],
     error: '',
-    validate: {},
+    // validate: {},
     allowMultiple: true,
   },
   imagesURL: {
@@ -105,7 +105,7 @@ const initialFormData = {
     valueShow: [],
     originValue: [],
     error: '',
-    validate: {},
+    // validate: {},
     focused: false,
   },
   metafields_global_title_tag: {
@@ -305,22 +305,24 @@ function CreateForm(props) {
         </Card>
         <Card sectioned>
           <Stack vertical>
-            <Stack.Item>
-              {created?.id &&
-                created.images.map((image, index) => (
-                  <img
-                    key={index}
-                    style={{ width: '150px', height: 'auto', margin: '10px', borderRadius: '5px' }}
-                    src={image.src}
-                    alt="HIHI"
-                  />
-                ))}
-            </Stack.Item>
             <Stack>
               <Stack.Item fill>
                 <FormControl
                   {...formData['images']}
                   onChange={(value) => handleChange('images', value)}
+                  onDeleteOriginValue={(value) => {
+                    let _formData = JSON.parse(JSON.stringify(formData))
+                    Array.from(['images']).forEach((key) => (_formData[key] = formData[key]))
+                    _formData['images'] = {
+                      ..._formData['images'],
+                      originValue: _formData['images'].originValue.filter(
+                        (item) => item.src !== value,
+                      ),
+                      error: '',
+                    }
+
+                    setFormData(_formData)
+                  }}
                 />
               </Stack.Item>
               <Stack.Item fill>

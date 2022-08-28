@@ -15,7 +15,7 @@ import { getStoreSetting } from './redux/actions/storeSetting'
 function AppContainer(props) {
   const { actions, storeSetting, notify, appLoading } = props
 
-  const [isFullscreen, setIsFullscreen] = useState(true)
+  const [isFullscreen, setIsFullscreen] = useState(false)
   const [openConfirmModal, setOpenConfirmModal] = useState(false)
 
   useEffect(() => {
@@ -76,6 +76,14 @@ function AppContainer(props) {
                 {
                   label: 'Products 1',
                   destination: '/products_test',
+                },
+                {
+                  label: 'Orders',
+                  destination: '/orders',
+                },
+                {
+                  label: 'Customers',
+                  destiantion: '/customers',
                 },
               ]}
             />

@@ -12,6 +12,7 @@ import { generateVariantsFromOptions } from './actions.js'
 
 function ProductsPage(props) {
   const { actions, location, navigate } = props
+  console.log('🚀 ~ file: index.jsx ~ line 15 ~ ProductsPage ~ location', location)
 
   const [searchParams, setSearchParams] = useSearchParams()
 
@@ -20,11 +21,11 @@ function ProductsPage(props) {
   const [created, setCreated] = useState(null)
   const [deleted, setDeleted] = useState(null)
 
-  const getProducts = async () => {
+  const getProducts = async (query) => {
     try {
       actions.showAppLoading()
 
-      let res = await ProductApi.find()
+      let res = await ProductApi.find(query)
       if (!res.success) {
         throw res.error
       }
@@ -39,8 +40,8 @@ function ProductsPage(props) {
   }
 
   useEffect(() => {
-    getProducts()
-  }, [])
+    getProducts(location.search)
+  }, [location.search])
 
   const getProductsCount = async () => {
     try {
@@ -127,6 +128,7 @@ function ProductsPage(props) {
       } else {
         //create
         res = await ProductApi.create(data)
+        console.log('res', res)
       }
 
       if (!res.success) {
@@ -136,7 +138,7 @@ function ProductsPage(props) {
       actions.showNotify({ message: created?.id ? 'Saved' : 'Created' })
 
       setCreated(null)
-      getProducts()
+      getProducts(location.search)
     } catch (error) {
       console.log(error)
       actions.showNotify({ message: error.message, error: true })
@@ -156,7 +158,7 @@ function ProductsPage(props) {
 
       actions.showNotify({ message: 'Deleted' })
 
-      getProducts()
+      getProducts(location.search)
     } catch (error) {
       console.log(error)
       actions.showNotify({ message: error.message, error: true })

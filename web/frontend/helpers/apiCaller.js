@@ -6,7 +6,6 @@ const apiCaller = async (endpoint, method = 'GET', data = undefined, extraHeader
   try {
     //request session tokem from App Bridge and App Bridge return a session token
     let token = await getSessionToken(createApp(window.SHOPIFY_APP))
-    console.log('token', token)
 
     // have a token => request data and when passes session token from be bằng cách đính kèm nó vào headers khi request được gửi đi.
     let axiosConfig = {
