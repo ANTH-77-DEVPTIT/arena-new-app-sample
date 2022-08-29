@@ -12,7 +12,6 @@ import { generateVariantsFromOptions } from './actions.js'
 
 function ProductsPage(props) {
   const { actions, location, navigate } = props
-  console.log('🚀 ~ file: index.jsx ~ line 15 ~ ProductsPage ~ location', location)
 
   const [searchParams, setSearchParams] = useSearchParams()
 
@@ -66,7 +65,6 @@ function ProductsPage(props) {
   }, [])
 
   const handleSubmit = async (formData) => {
-    console.log('🚀 ~ file: index.jsx ~ line 68 ~ handleSubmit ~ formData', formData)
     try {
       actions.showAppLoading()
 
@@ -80,6 +78,31 @@ function ProductsPage(props) {
         metafields_global_description_tag: formData.metafields_global_description_tag.value,
       }
 
+      //handleUploadImage when create/update product
+      if (formData['images'].value.length) {
+        let imagesBase64 = await ProductImageApi.create(formData['images'].value)
+        if (!imagesBase64.success) {
+          actions.showNotify({ error: true, message: imagesBase64.error.message })
+        }
+        formData['images'].value = [...imagesBase64.data, ...formData['images'].originValue]
+      } else if (formData['images'].originValue.length) {
+        formData['images'].value = formData['images'].originValue
+      }
+      if (formData['images'].value.length) {
+        data.images = formData['images'].value
+      } else {
+        data.images = []
+      }
+
+      //handle create imageURL
+      if (formData['imagesURL'].valueUpload) {
+        data.images = [...data.images, ...formData['imagesURL'].valueUpload]
+      }
+      if (formData['imagesURL'].value) {
+        data.images = [...data.images, { src: formData['imagesURL'].value }]
+      }
+
+      //handle options for products
       let options = [...formData['options']]
       options = options
         .filter((item) => item.name.value && item.values.value)
@@ -93,42 +116,14 @@ function ProductsPage(props) {
         data.variants = generateVariantsFromOptions(options)
       }
 
-      let imagesFile = formData.images.value
-      let images = null
-      if (imagesFile) {
-        images = await ProductImageApi.create(imagesFile)
-      }
-
-      //handleUploadImage when create/update product
-      if (formData['images'].value.length) {
-        let images = await ProductImageApi.create(imagesFile)
-        if (!images.success) {
-          actions.showNotify({ error: true, message: images.error.message })
-        } else {
-          data.images = [...images.data, ...formData['images'].originValue]
-        }
-      } else if (formData['images'].originValue.length) {
-        data.images = formData['images'].originValue
-      }
-
-      //handle create imageURL
-      if (formData['imagesURL'].originValue) {
-        data.images = [...data.images, ...formData['imagesURL'].originValue]
-      }
-      if (formData['imagesURL'].value) {
-        data.images = [...data.images, { src: formData['imagesURL'].value }]
-      }
-
       let res = null
 
       if (created?.id) {
         //update
         res = await ProductApi.update(created.id, data)
-        console.log('🚀 ~ data update ~', res)
       } else {
         //create
         res = await ProductApi.create(data)
-        console.log('res', res)
       }
 
       if (!res.success) {

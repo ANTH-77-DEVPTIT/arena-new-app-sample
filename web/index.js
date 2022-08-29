@@ -23,6 +23,8 @@ import productRoute from './backend/routes/admin/product.js'
 import billingRoute from './backend/routes/admin/billing.js'
 import submitionRoute from './backend/routes/admin/submition.js'
 import productImageRoute from './backend/routes/admin/product_image.js'
+import customerRoute from './backend/routes/admin/customer.js'
+import orderRoute from './backend/routes/admin/order.js'
 
 const USE_ONLINE_TOKENS = false
 const TOP_LEVEL_OAUTH_COOKIE = 'shopify_top_level_oauth'
@@ -122,6 +124,8 @@ export async function createServer(
   storeSettingRoute(app)
   productRoute(app)
   productImageRoute(app)
+  customerRoute(app)
+  orderRoute(app)
   billingRoute(app)
   submitionRoute(app)
   // -------------------------------------------

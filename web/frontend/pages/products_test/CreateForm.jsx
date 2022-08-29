@@ -7,7 +7,9 @@ import {
   DisplayText,
   Stack,
   TextField,
+  Thumbnail,
 } from '@shopify/polaris'
+import { DeleteMinor } from '@shopify/polaris-icons'
 import { useEffect, useState, useRef } from 'react'
 import AppHeader from '../../components/AppHeader'
 import FormValidate from '../../helpers/formValidate'
@@ -103,9 +105,9 @@ const initialFormData = {
     value: '',
     placeholder: 'Enter your URL...',
     valueShow: [],
-    originValue: [],
+    valueUpload: [],
     error: '',
-    // validate: {},
+    validate: {},
     focused: false,
   },
   metafields_global_title_tag: {
@@ -188,6 +190,8 @@ function CreateForm(props) {
     _formData.metafields_global_description_tag.value = 'Description SEO nhe'
 
     if (created.id) {
+      console.log('🚀 ~ CreateForm ~ created', created)
+
       Array.from([
         'title',
         'body_html',
@@ -200,6 +204,23 @@ function CreateForm(props) {
       Array.from(['images']).map(
         (key) => (_formData[key] = { ..._formData[key], originValue: created[key] || [] }),
       )
+
+      //handle options when update
+      const optionMapping = created.options.map((item) => {
+        return {
+          name: { ...optionFormData['name'], value: item.name },
+          values: { ...optionFormData['values'], value: item.values.toString() },
+        }
+      })
+      if (_formData['options']) {
+        Array.from(['options']).map((key) => {
+          _formData[key] = [..._formData[key], ...optionMapping]
+        })
+      } else {
+        Array.from(['options']).map((key) => {
+          _formData[key] = [...optionMapping]
+        })
+      }
     }
 
     setFormData(_formData)
@@ -210,7 +231,7 @@ function CreateForm(props) {
       ...formData,
       imagesURL: {
         ...formData['imagesURL'],
-        originValue: [...formData['imagesURL'].originValue, { src: formData['imagesURL'].value }],
+        valueUpload: [...formData['imagesURL'].valueUpload, { src: formData['imagesURL'].value }],
         valueShow: [...formData['imagesURL'].valueShow, formData['imagesURL'].value],
         value: '',
         focused: true,
@@ -239,9 +260,13 @@ function CreateForm(props) {
   const handleSubmit = () => {
     try {
       const { valid, data } = FormValidate.validateForm(formData)
+      console.log('🚀 ~ file: CreateForm.jsx ~ line 244 ~ handleSubmit ~ data', data)
 
       if (valid) {
         data['images'].value = formData['images'].value
+        if (!data['options']) {
+          data['options'] = []
+        }
         onSubmit(data)
       } else {
         setFormData(data)

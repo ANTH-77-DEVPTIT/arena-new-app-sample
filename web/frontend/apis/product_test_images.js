@@ -13,10 +13,10 @@ const findById = async (product_id, image_id) => {
 }
 
 const create = async (images) => {
-  console.log('🚀 ~ images', images)
+  console.log('🚀 ~ images upload', images)
   const formData = new FormData()
 
-  images?.forEach((item) => formData.append('images', item))
+  images.forEach((item) => formData.append('images', item))
 
   return await apiCaller(`/api/upload`, 'POST', formData)
 }
