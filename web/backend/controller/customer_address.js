@@ -1,15 +1,21 @@
 import verifyToken from '../auth/verifyToken.js'
 import ResponseHandler from '../helpers/responseHandler.js'
-import CustomerMiddleware from '../middlewares/customer.js'
+import CustomerAddressMiddleware from '../middlewares/customer_address.js'
 
 export default {
-  count: async (req, res) => {
+  create: async (req, res) => {
     try {
       const session = verifyToken(req, res)
       const { shop, accessToken } = session
-      console.log('session :>> ', session)
 
-      const data = await CustomerMiddleware.count({ shop, accessToken })
+      const { customer_id } = req.params
+
+      const data = await CustomerAddressMiddleware.create({
+        shop,
+        accessToken,
+        customer_id,
+        data: req.body,
+      })
 
       return ResponseHandler.success(res, data)
     } catch (error) {
@@ -22,7 +28,9 @@ export default {
       const session = verifyToken(req, res)
       const { shop, accessToken } = session
 
-      const data = await CustomerMiddleware.find({ ...req.query, shop, accessToken })
+      const { id } = req.params
+
+      const data = await CustomerAddressMiddleware.find({ shop, accessToken, id })
 
       return ResponseHandler.success(res, data)
     } catch (error) {
@@ -34,8 +42,10 @@ export default {
     try {
       const session = verifyToken(req, res)
       const { shop, accessToken } = session
-      const { id } = req.params
-      const data = await CustomerMiddleware.findById({ id, shop, accessToken })
+
+      const { id, address_id } = req.params
+
+      const data = await CustomerAddressMiddleware.findById({ shop, accessToken, id, address_id })
 
       return ResponseHandler.success(res, data)
     } catch (error) {
@@ -43,41 +53,40 @@ export default {
     }
   },
 
-  create: async (req, res) => {
+  update_address: async (req, res) => {
     try {
       const session = verifyToken(req, res)
       const { shop, accessToken } = session
 
-      const data = await CustomerMiddleware.create({ shop, accessToken, data: req.body })
+      const { id, address_id } = req.params
+
+      const data = await CustomerAddressMiddleware.update_address({
+        shop,
+        accessToken,
+        id,
+        address_id,
+        data: req.body,
+      })
+
       return ResponseHandler.success(res, data)
     } catch (error) {
       return ResponseHandler.error(res, error)
     }
   },
 
-  update: async (req, res) => {
+  update_default_address: async (req, res) => {
     try {
       const session = verifyToken(req, res)
       const { shop, accessToken } = session
 
-      const { id } = req.params
+      const { id, address_id } = req.params
 
-      const data = await CustomerMiddleware.update({ shop, accessToken, id, data: req.body })
-
-      return ResponseHandler.success(res, data)
-    } catch (error) {
-      return ResponseHandler.error(res, error)
-    }
-  },
-
-  search: async (req, res) => {
-    try {
-      const session = verifyToken(req, res)
-      const { shop, accessToken } = session
-
-      const query = { ...req.query }
-
-      const data = await CustomerMiddleware.search({ shop, accessToken, query })
+      const data = await CustomerAddressMiddleware.update_default_address({
+        shop,
+        accessToken,
+        id,
+        address_id,
+      })
 
       return ResponseHandler.success(res, data)
     } catch (error) {
@@ -85,29 +94,19 @@ export default {
     }
   },
 
-  account_activation_url: async (req, res) => {
-    try {
-      const session = verifyToken(req, res)
-      const { shop, accessToken } = session
-
-      const { id } = req.params
-
-      const data = await CustomerMiddleware.account_activation_url({ shop, accessToken, id })
-
-      return ResponseHandler.success(res, data)
-    } catch (error) {
-      return ResponseHandler.error(res, error)
-    }
-  },
-
-  send_invite: async (req, res) => {
+  update_address_multi: async (req, res) => {
     try {
       const session = verifyToken(req, res)
       const { shop, accessToken } = session
 
       const { id } = req.params
 
-      const data = await CustomerMiddleware.sent({ shop, accessToken, id, data: req.body })
+      const data = await CustomerAddressMiddleware.update_address_multi({
+        shop,
+        accessToken,
+        id,
+        data: req.body,
+      })
 
       return ResponseHandler.success(res, data)
     } catch (error) {
@@ -115,14 +114,14 @@ export default {
     }
   },
 
-  customers_order: async (req, res) => {
+  delete: async (req, res) => {
     try {
       const session = verifyToken(req, res)
       const { shop, accessToken } = session
 
-      const { id } = req.params
+      const { id, address_id } = req.params
 
-      const data = await CustomerMiddleware.customers_order({ shop, accessToken, id })
+      const data = await CustomerAddressMiddleware.delete({ shop, accessToken, id, address_id })
 
       return ResponseHandler.success(res, data)
     } catch (error) {

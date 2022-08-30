@@ -63,6 +63,7 @@ const create = async ({ shop, accessToken, data }) => {
 }
 
 const update = async ({ shop, accessToken, id, data }) => {
+  console.log('🚀 ~ file: customer.js ~ line 66 ~ update ~ data', data)
   try {
     validateParams({ shop, accessToken, id, data })
 
@@ -76,7 +77,55 @@ const search = async ({ shop, accessToken, query }) => {
   try {
     validateParams({ shop, accessToken, query })
 
-    return await apiCaller({ shop, accessToken, endpoint: `search.json?query=${query}` })
+    return await apiCaller({
+      shop,
+      accessToken,
+      endpoint: `customers/search.json?query=${query || ''}`,
+    })
+  } catch (error) {
+    throw error
+  }
+}
+
+const account_activation_url = async ({ shop, accessToken, id }) => {
+  try {
+    validateParams({ shop, accessToken, id })
+
+    return await apiCaller({
+      shop,
+      accessToken,
+      method: 'POST',
+      endpoint: `customers/${id}/account_activation_url.json`,
+    })
+  } catch (error) {
+    throw error
+  }
+}
+
+const send_invite = async ({ shop, accessToken, id, data }) => {
+  try {
+    validateParams({ shop, accessToken, id, data })
+
+    return await apiCaller({
+      shop,
+      accessToken,
+      method: 'POST',
+      endpoint: `customers/${id}/send_invite.json`,
+    })
+  } catch (error) {
+    throw error
+  }
+}
+
+const customers_order = async ({ shop, accessToken, id }) => {
+  try {
+    validateParams({ shop, accessToken, id })
+
+    return await apiCaller({
+      shop,
+      accessToken,
+      endpoint: `customers/${id}/orders.json`,
+    })
   } catch (error) {
     throw error
   }
@@ -90,6 +139,9 @@ const CustomerMiddleware = {
   create,
   update,
   search,
+  account_activation_url,
+  send_invite,
+  customers_order,
 }
 
 export default CustomerMiddleware
