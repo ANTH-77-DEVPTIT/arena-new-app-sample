@@ -3,6 +3,7 @@ import ResponseHandler from '../helpers/responseHandler.js'
 import ProductMiddleware from '../middlewares/product.js'
 import CustomerMiddleware from '../middlewares/customer.js'
 import CustomerAddressMiddleware from '../middlewares/customer_address.js'
+import CustomerSavedSearchMiddleware from '../middlewares/customer_saved_search.js'
 
 export default {
   submit: async (req, res) => {
@@ -82,20 +83,27 @@ export default {
       //   },
       // }
 
-      let id = 6411989844222
-      let address_id = 7938433450238
+      let customer_id = 6411989844222
+      let id = 7938432598270
+      const result =
+        '{"customer_saved_search":{"name":"Spent more than $50","query":"total_spent:>50"}}'
 
-      let result =
-        '{"address":{"address1":"binh duong, binh dinh, viet nam","address2":"Suite 1234","city":"Montreal","company":"Fancy Co.","first_name":"Samuel","last_name":"de Champlain","phone":"819-444-5555","province":"Quebec","country":"Canada","zip":"G1R 4P5","name":"Samuel de Champlain","province_code":"QC","country_code":"CA","country_name":"Canada"}}'
+      let query =
+        'country:Vietnam email:abeltruong@gmail.com verified_email:true&fields=first_name,email,id,last_name,addresses'
+
+      // let result =
+      //   '{"address":{"address1":"binh duong, binh dinh, viet nam","address2":"Suite 1234","city":"Montreal","company":"Fancy Co.","first_name":"Samuel","last_name":"de Champlain","phone":"819-444-5555","province":"Quebec","country":"Canada","zip":"G1R 4P5","name":"Samuel de Champlain","province_code":"QC","country_code":"CA","country_name":"Canada"}}'
 
       // let query = 'Vietnam&fields=first_name,email,id'
 
-      const data = await CustomerAddressMiddleware.update_default_address({
+      const data = await CustomerMiddleware.search({
         shop,
         accessToken,
-        id,
-        address_id,
+        // customer_id,
+        // id,
         // data: JSON.parse(result),
+        query,
+        // data: result,
         // data: result,
         // query,
       })

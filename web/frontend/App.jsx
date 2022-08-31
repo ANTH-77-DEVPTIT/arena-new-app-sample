@@ -29,10 +29,6 @@ export default function App(props) {
             pathname: '/orders',
           },
           {
-            label: 'test',
-            pathname: '/test-submit',
-          },
-          {
             label: 'Customers',
             pathname: '/customers',
           },

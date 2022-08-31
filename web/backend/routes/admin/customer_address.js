@@ -9,9 +9,9 @@ export default function customerAddressRoute(app) {
   app.get('/api/customer/:id/addresses/:address_id', Controller.findById)
   //update địa chỉ khách hàng đã tồn tại
   app.put('/api/customer/:id/addresses/:address_id', Controller.update_address)
-  //giá địa chỉ mặc định cho khách hàng
+  //set địa chỉ mặc định cho khách hàng
   app.put('/api/customer/:id/addresses/:address_id/default', Controller.update_default_address)
-  //thực hiện các hành động hàng loạt cho các địa chỉ khách hàng.
+  //thực hiện các hành động hàng loạt cho các địa chỉ khách hàng. phần này route chưa chạy???
   app.put('/api/customer/:id/addresses/multi', Controller.update_address_multi)
   //xóa địa chỉ của danh sách địa chỉ của khách hàng
   app.delete('/api/customer/:id/addresses', Controller.delete)

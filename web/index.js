@@ -25,6 +25,7 @@ import submitionRoute from './backend/routes/admin/submition.js'
 import productImageRoute from './backend/routes/admin/product_image.js'
 import customerRoute from './backend/routes/admin/customer.js'
 import customerAddressRoute from './backend/routes/admin/customer_address.js'
+import CustomerSavedSearchRoute from './backend/routes/admin/customer_saved_search.js'
 import orderRoute from './backend/routes/admin/order.js'
 
 const USE_ONLINE_TOKENS = false
@@ -127,6 +128,7 @@ export async function createServer(
   productImageRoute(app)
   customerRoute(app)
   customerAddressRoute(app)
+  CustomerSavedSearchRoute(app)
   orderRoute(app)
   billingRoute(app)
   submitionRoute(app)

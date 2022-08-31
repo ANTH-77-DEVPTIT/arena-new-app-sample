@@ -27,60 +27,52 @@ const find = async ({ shop, accessToken, customer_id }) => {
   }
 }
 
-const findById = async ({ shop, accessToken, customer_id, address_id }) => {
+const findById = async ({ shop, accessToken, customer_id, id }) => {
   try {
-    validateParams({ shop, accessToken, customer_id, address_id })
+    validateParams({ shop, accessToken, customer_id, id })
 
     return await apiCaller({
       shop,
       accessToken,
-      endpoint: `customers/${customer_id}/addresses/${address_id}.json`,
+      endpoint: `customers/${customer_id}/addresses/${id}.json`,
     })
   } catch (error) {
     throw error
   }
 }
 
-const update_address = async ({ shop, accessToken, customer_id, address_id, data }) => {
+const update_address = async ({ shop, accessToken, customer_id, id, data }) => {
   try {
-    validateParams({ shop, accessToken, customer_id, address_id })
+    validateParams({ shop, accessToken, customer_id, id })
 
     return await apiCaller({
       shop,
       accessToken,
       method: 'PUT',
       data,
-      endpoint: `customers/${customer_id}/addresses/${address_id}.json`,
+      endpoint: `customers/${customer_id}/addresses/${id}.json`,
     })
   } catch (error) {
     throw error
   }
 }
 
-const update_default_address = async ({ shop, accessToken, customer_id, address_id }) => {
+const update_default_address = async ({ shop, accessToken, customer_id, id }) => {
   try {
-    validateParams({ shop, accessToken, customer_id, address_id })
-    console.log(
-      '🚀 ~ file: customer_address.js ~ line 63 ~ constupdate_default_address= ~ id',
-      customer_id,
-    )
-    console.log(
-      '🚀 ~ file: customer_address.js ~ line 63 ~ constupdate_default_address= ~ address_id',
-      address_id,
-    )
+    validateParams({ shop, accessToken, customer_id, id })
 
     return await apiCaller({
       shop,
       accessToken,
       method: 'PUT',
-      endpoint: `customers/${customer_id}/addresses/${address_id}/default.json`,
+      endpoint: `customers/${customer_id}/addresses/${id}/default.json`,
     })
   } catch (error) {
     throw error
   }
 }
 
-const update_address_multi = async ({ shop, accessToken, customer_id, data }) => {
+const update_multi = async ({ shop, accessToken, customer_id, data }) => {
   try {
     validateParams({ shop, accessToken, customer_id })
 
@@ -88,22 +80,22 @@ const update_address_multi = async ({ shop, accessToken, customer_id, data }) =>
       shop,
       accessToken,
       method: 'PUT',
-      endpoint: `customers/${customer_id}/addresses/set.json?address_ids[]=${data['address_ids[]']}&operation=${data['operation']}`,
+      endpoint: `customers/${customer_id}/addresses/set.json?ids[]=${data['address_ids']}&operation=${data['operation']}`,
     })
   } catch (error) {
     throw error
   }
 }
 
-const _delete = async ({ shop, accessToken, customer_id, address_id }) => {
+const _delete = async ({ shop, accessToken, customer_id, id }) => {
   try {
-    validateParams({ shop, accessToken, customer_id, address_id })
+    validateParams({ shop, accessToken, customer_id, id })
 
     return await apiCaller({
       shop,
       accessToken,
       method: 'DELETE',
-      endpoint: `customers/${customer_id}/addresses/${address_id}.json`,
+      endpoint: `customers/${customer_id}/addresses/${id}.json`,
     })
   } catch (error) {
     throw error
@@ -116,7 +108,7 @@ const CustomerAddressMiddleware = {
   findById,
   update_address,
   update_default_address,
-  update_address_multi,
+  update_multi,
   delete: _delete,
 }
 

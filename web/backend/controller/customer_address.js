@@ -28,9 +28,9 @@ export default {
       const session = verifyToken(req, res)
       const { shop, accessToken } = session
 
-      const { id } = req.params
+      const { customer_id } = req.params
 
-      const data = await CustomerAddressMiddleware.find({ shop, accessToken, id })
+      const data = await CustomerAddressMiddleware.find({ shop, accessToken, customer_id })
 
       return ResponseHandler.success(res, data)
     } catch (error) {
@@ -43,9 +43,9 @@ export default {
       const session = verifyToken(req, res)
       const { shop, accessToken } = session
 
-      const { id, address_id } = req.params
+      const { customer_id, id } = req.params
 
-      const data = await CustomerAddressMiddleware.findById({ shop, accessToken, id, address_id })
+      const data = await CustomerAddressMiddleware.findById({ shop, accessToken, customer_id, id })
 
       return ResponseHandler.success(res, data)
     } catch (error) {
@@ -58,13 +58,13 @@ export default {
       const session = verifyToken(req, res)
       const { shop, accessToken } = session
 
-      const { id, address_id } = req.params
+      const { customer_id, id } = req.params
 
       const data = await CustomerAddressMiddleware.update_address({
         shop,
         accessToken,
+        customer_id,
         id,
-        address_id,
         data: req.body,
       })
 
@@ -79,13 +79,13 @@ export default {
       const session = verifyToken(req, res)
       const { shop, accessToken } = session
 
-      const { id, address_id } = req.params
+      const { customer_id, id } = req.params
 
       const data = await CustomerAddressMiddleware.update_default_address({
         shop,
         accessToken,
+        customer_id,
         id,
-        address_id,
       })
 
       return ResponseHandler.success(res, data)
@@ -99,12 +99,12 @@ export default {
       const session = verifyToken(req, res)
       const { shop, accessToken } = session
 
-      const { id } = req.params
+      const { customer_id } = req.params
 
       const data = await CustomerAddressMiddleware.update_address_multi({
         shop,
         accessToken,
-        id,
+        customer_id,
         data: req.body,
       })
 
@@ -119,9 +119,9 @@ export default {
       const session = verifyToken(req, res)
       const { shop, accessToken } = session
 
-      const { id, address_id } = req.params
+      const { customer_id, id } = req.params
 
-      const data = await CustomerAddressMiddleware.delete({ shop, accessToken, id, address_id })
+      const data = await CustomerAddressMiddleware.delete({ shop, accessToken, customer_id, id })
 
       return ResponseHandler.success(res, data)
     } catch (error) {
