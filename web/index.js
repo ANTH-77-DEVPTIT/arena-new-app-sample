@@ -194,8 +194,6 @@ createServer().then(({ app }) =>
     console.log(`+                                      +`)
     console.log(`++++++++++++++++Truong++++++++++++++++++`)
     console.log(``)
-    console.log(`test github`)
-    console.log(`test github theem laanf nuawx`)
     console.log(`[SERVE] ${process.env.HOST}/install`)
     console.log(``)
     console.log(`[ DEV ] ${process.env.HOST}/api/auth?shop=${process.env.SHOP}`)
