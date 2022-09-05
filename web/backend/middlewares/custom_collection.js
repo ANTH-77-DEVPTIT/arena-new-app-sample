@@ -47,20 +47,22 @@ const count = async ({ shop, accessToken }) => {
   }
 }
 
-const find = async ({ shop, accessToken, limit, pageInfo, order }) => {
+const find = async ({ shop, accessToken, limit, since_id, product_id, ids }) => {
+  console.log('🚀 ~ file: custom_collection.js ~ line 51 ~ find ~ ids', ids)
   try {
     validateParams({ shop, accessToken })
 
     let _limit = limit ? (parseInt(limit) >= 0 ? parseInt(limit) : 50) : 50
 
     let endpoint = `custom_collections.json?limit=${_limit}`
-    if (pageInfo) {
-      endpoint += `&page_info=${pageInfo}`
+    if (since_id) {
+      endpoint += `&since_id=${since_id}`
     }
-    if (order) {
-      endpoint += `&order=${order}`
-    } else {
-      endpoint += `&order=updated_at+desc`
+    if (product_id) {
+      endpoint += `&product_id=${product_id}`
+    }
+    if (ids) {
+      endpoint += `&ids=${ids}`
     }
 
     return await apiCaller({

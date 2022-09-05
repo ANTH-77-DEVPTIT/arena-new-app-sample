@@ -88,9 +88,10 @@ const findById = async ({ shop, accessToken, id }) => {
 const create = async ({ shop, accessToken, data }) => {
   try {
     validateParams({ shop, accessToken, data })
-    console.log('🚀 ~ file: product.js ~ line 91 ~ create ~ data', data)
+    //cho nay de test nha!!!
+    // console.log('🚀 ~ file: product.js ~ line 91 ~ create ~ data', data)
 
-    console.log('data.images :>> ', data.images)
+    // console.log('data.images :>> ', data.images)
 
     // //handle Image upload files
     // let images = []

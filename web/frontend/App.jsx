@@ -32,6 +32,10 @@ export default function App(props) {
             label: 'Customers',
             pathname: '/customers',
           },
+          {
+            label: 'Test Api',
+            pathname: '/test_api',
+          },
         ]}
         secondaryActions={[
           {
