@@ -47,13 +47,13 @@ const count = async ({ shop, accessToken }) => {
   }
 }
 
-const find = async ({ shop, accessToken, limit, since_id, product_id, ids }) => {
-  console.log('🚀 ~ file: custom_collection.js ~ line 51 ~ find ~ ids', ids)
+const find = async ({ shop, accessToken, limit, since_id, product_id, ids, pageInfo, order }) => {
   try {
     validateParams({ shop, accessToken })
 
     let _limit = limit ? (parseInt(limit) >= 0 ? parseInt(limit) : 50) : 50
 
+    //đọc lại chổ này để thực hiện phần phân trang cho đúng nhé!!!!!
     let endpoint = `custom_collections.json?limit=${_limit}`
     if (since_id) {
       endpoint += `&since_id=${since_id}`
@@ -63,6 +63,14 @@ const find = async ({ shop, accessToken, limit, since_id, product_id, ids }) => 
     }
     if (ids) {
       endpoint += `&ids=${ids}`
+    }
+    if (pageInfo) {
+      endpoint += `&page_info=${pageInfo}`
+    }
+    if (order) {
+      endpoint += `&order=${order}`
+    } else {
+      endpoint += `&order=updated_at+desc`
     }
 
     return await apiCaller({

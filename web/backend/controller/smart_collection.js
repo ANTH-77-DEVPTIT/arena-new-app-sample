@@ -1,56 +1,14 @@
 import verifyToken from '../auth/verifyToken.js'
-import ProductCollectionMiddleware from '../middlewares/product_collection.js'
-import CustomCollectionMiddleware from '../middlewares/custom_collection.js'
+import SmartCollectionMiddleware from '../middlewares/smart_collection.js'
 import ResponseHandler from '../helpers/responseHandler.js'
 
 export default {
-  //collections
-  find_single_collection: async (req, res) => {
-    try {
-      const session = await verifyToken(req, res)
-      const { shop, accessToken } = session
-
-      const { collection_id } = req.params
-
-      const data = await ProductCollectionMiddleware.find_single_collection({
-        shop,
-        accessToken,
-        collection_id,
-      })
-
-      return ResponseHandler.success(res, data)
-    } catch (error) {
-      return ResponseHandler.error(res, error)
-    }
-  },
-
-  find_products: async (req, res) => {
-    try {
-      const session = verifyToken(req, res)
-      const { shop, accessToken } = session
-
-      const { collection_id } = req.params
-
-      const data = await ProductCollectionMiddleware.find_products({
-        shop,
-        accessToken,
-        collection_id,
-        ...req.query,
-      })
-
-      return ResponseHandler.success(res, data)
-    } catch (error) {
-      return ResponseHandler.error(res, error)
-    }
-  },
-
-  //custom collections api
   create: async (req, res) => {
     try {
       const session = verifyToken(req, res)
       const { shop, accessToken } = session
 
-      const data = await CustomCollectionMiddleware.create({ shop, accessToken, data: req.body })
+      const data = await SmartCollectionMiddleware.create({ shop, accessToken, data: req.body })
 
       return ResponseHandler.success(res, data)
     } catch (error) {
@@ -63,7 +21,7 @@ export default {
       const session = verifyToken(req, res)
       const { shop, accessToken } = session
 
-      const data = await CustomCollectionMiddleware.find({ shop, accessToken, ...req.query })
+      const data = await SmartCollectionMiddleware.find({ shop, accessToken, ...req.query })
 
       return ResponseHandler.success(res, data)
     } catch (error) {
@@ -78,11 +36,7 @@ export default {
 
       const { id } = req.params
 
-      const data = await CustomCollectionMiddleware.findById({
-        shop,
-        accessToken,
-        id,
-      })
+      const data = await SmartCollectionMiddleware.findById({ shop, accessToken, id })
 
       return ResponseHandler.success(res, data)
     } catch (error) {
@@ -95,7 +49,7 @@ export default {
       const session = verifyToken(req, res)
       const { shop, accessToken } = session
 
-      const data = CustomCollectionMiddleware.count({ shop, accessToken })
+      const data = await SmartCollectionMiddleware.count({ shop, accessToken, id: req.query.id })
 
       return ResponseHandler.success(res, data)
     } catch (error) {
@@ -110,11 +64,24 @@ export default {
 
       const { id } = req.params
 
-      const data = await CustomCollectionMiddleware.update({
+      const data = await SmartCollectionMiddleware.update({ shop, accessToken, id, data: req.body })
+
+      return ResponseHandler.success(res, data)
+    } catch (error) {
+      return ResponseHandler.error(res, error)
+    }
+  },
+
+  //order position product in smart collections
+  update_order_product: async (req, res) => {
+    try {
+      const session = verifyToken(req, res)
+      const { shop, accessToken } = session
+
+      const data = await SmartCollectionMiddleware.update_order_product({
         shop,
         accessToken,
-        id,
-        data: req.body,
+        ...req.query,
       })
 
       return ResponseHandler.success(res, data)
@@ -130,7 +97,7 @@ export default {
 
       const { id } = req.params
 
-      const data = await CustomCollectionMiddleware.delete({ shop, accessToken, id })
+      const data = await SmartCollectionMiddleware.delete({ shop, accessToken, id })
 
       return ResponseHandler.success(res, data)
     } catch (error) {

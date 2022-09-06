@@ -25,6 +25,7 @@ import submitionRoute from './backend/routes/admin/submition.js'
 import productImageRoute from './backend/routes/admin/product_image.js'
 import productCollectRoute from './backend/routes/admin/product_collect.js'
 import productCollectionRoute from './backend/routes/admin/product_collection.js'
+import SmartCollectionRoute from './backend/routes/admin/smart_collection.js'
 import customerRoute from './backend/routes/admin/customer.js'
 import customerAddressRoute from './backend/routes/admin/customer_address.js'
 import CustomerSavedSearchRoute from './backend/routes/admin/customer_saved_search.js'
@@ -130,6 +131,7 @@ export async function createServer(
   productImageRoute(app)
   productCollectRoute(app)
   productCollectionRoute(app)
+  SmartCollectionRoute(app)
   customerRoute(app)
   customerAddressRoute(app)
   CustomerSavedSearchRoute(app)

@@ -37,11 +37,18 @@ const getAll = async ({ shop, accessToken, count }) => {
   }
 }
 
-const count = async ({ shop, accessToken }) => {
+const count = async ({ shop, accessToken, id }) => {
   try {
     validateParams({ shop, accessToken })
 
-    return await apiCaller({ shop, accessToken, endpoint: `smart_collections/count.json` })
+    let endpoint
+    if (id) {
+      endpoint = `smart_collections/count.json?product_id=${id}`
+    } else {
+      endpoint = `smart_collections/count.json`
+    }
+
+    return await apiCaller({ shop, accessToken, endpoint })
   } catch (error) {
     throw error
   }
@@ -116,6 +123,29 @@ const update = async ({ shop, accessToken, id, data }) => {
   }
 }
 
+const update_order_product = async ({ shop, accessToken, id, productIDs, sort_order, data }) => {
+  try {
+    validateParams({ shop, accessToken, id, data })
+
+    let endpoint = `smart_collections/${id}/order.json?`
+
+    let productQuery = productIDs.split(',')
+
+    if (productQuery) {
+      productQuery.map((product_id, index) => {
+        endpoint += `products[]=${product_id}${index === productQuery.length - 1 ? '' : '&'}`
+      })
+    }
+    if (sort_order) {
+      endpoint += `?sort_order=${sort_order}`
+    }
+
+    return await apiCaller({ shop, accessToken, method: 'PUT', endpoint })
+  } catch (error) {
+    throw error
+  }
+}
+
 const _delete = async ({ shop, accessToken, id }) => {
   try {
     validateParams({ shop, accessToken, id })
@@ -138,6 +168,7 @@ const SmartCollectionMiddleware = {
   findById,
   create,
   update,
+  update_order_product,
   delete: _delete,
 }
 

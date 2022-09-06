@@ -7,6 +7,7 @@ import CustomerSavedSearchMiddleware from '../middlewares/customer_saved_search.
 import ProductCollectMiddleware from '../middlewares/product_collect.js'
 import ProductCollectionMiddleware from '../middlewares/product_collection.js'
 import CustomCollectionMiddleware from '../middlewares/custom_collection.js'
+import SmartCollectionMiddleware from '../middlewares/smart_collection.js'
 
 export default {
   submit: async (req, res) => {
@@ -99,34 +100,57 @@ export default {
 
       // let query = 'Vietnam&fields=first_name,email,id'
 
-      let result = {
-        custom_collection: {
-          title: 'collection 1 nhoeee!!',
-          published: true,
-          body_html: '<p>5000 songs in your pocket</p>',
-          image: {
-            src: 'https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&w=1000&q=80',
-            alt: 'Anh ne la image nha!!',
-          },
-          // collects: [
-          //   { product_id: 921728736, position: 1 },
-          //   { id: 455204334, position: 2 },
-          // ],
-        },
-      }
+      // let result = {
+      //   custom_collection: {
+      //     title: 'collection 1 nhoeee!!',
+      //     published: true,
+      //     body_html: '<p>5000 songs in your pocket</p>',
+      //     // image: {
+      //     //   src: 'https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&w=1000&q=80',
+      //     //   alt: 'Anh ne la image nha!!',
+      //     // },
+      //     image: '',
+      //     // collects: [
+      //     //   { product_id: 921728736, position: 1 },
+      //     //   { product_id: 455204334, position: 2 },
+      //     // ],
+      //   },
+      // }
 
-      const data = await CustomCollectionMiddleware.update({
+      // let result = {
+      //   smart_collection: {
+      //     title: 'My Girl nha!',
+      //     body_html: '<p>5000 songs in your pocket nhoa!</p>',
+      //     rules: [{ column: 'title', relation: 'contains', condition: 'nhum' }],
+      //   },
+      // }
+
+      let productIDs = '7834751664382,7847646822654,7834766737662,7834417856766,7834417463550'
+
+      // const data = await SmartCollectionMiddleware.findById({
+      //   shop,
+      //   accessToken,
+      //   // since_id: 401711268094,
+      //   // product_id: 7815317356798,
+      //   // ids: '401711563006,401710678270,400695492862',
+      //   // customer_id,
+      //   id: 401690099966,
+      // })
+
+      const data = await SmartCollectionMiddleware.update_order_product({
         shop,
         accessToken,
-        id: 401711563006,
         // since_id: 401711268094,
         // product_id: 7815317356798,
         // ids: '401711563006,401710678270,400695492862',
         // customer_id,
-        // id,
+        id: 401690099966,
+        productIDs,
+        data: {},
         // data: JSON.parse(result),
+        // data: result,
         // query,
-        data: result,
+        // data: result,
         // limit: 1,
       })
 

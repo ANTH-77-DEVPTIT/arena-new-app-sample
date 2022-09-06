@@ -12,5 +12,4 @@ export default function productCollectionRoute(app) {
   app.get('/api/custom_collections/count', Controller.count)
   app.put('/api/custom_collections/:id', Controller.update)
   app.delete('/api/custom_collections/:id', Controller.delete)
-  //smart collections Routes
 }
