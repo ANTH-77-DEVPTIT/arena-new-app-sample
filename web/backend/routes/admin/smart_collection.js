@@ -1,6 +1,6 @@
 import Controller from '../../controller/smart_collection.js'
 
-export default function SmartCollectionRoute(app) {
+export default function smartCollectionRoute(app) {
   app.post('/api/smart_collections', Controller.create)
   app.get('/api/smart_collections', Controller.find)
   app.get('/api/smart_collections/:id', Controller.findById)
