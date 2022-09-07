@@ -29,7 +29,7 @@ import smartCollectionRoute from './backend/routes/admin/smart_collection.js'
 import customerRoute from './backend/routes/admin/customer.js'
 import customerAddressRoute from './backend/routes/admin/customer_address.js'
 import CustomerSavedSearchRoute from './backend/routes/admin/customer_saved_search.js'
-import orderRoute from './backend/routes/admin/order.js'
+import orderRoute from './backend/routes/admin/order/order.js'
 
 const USE_ONLINE_TOKENS = false
 const TOP_LEVEL_OAUTH_COOKIE = 'shopify_top_level_oauth'

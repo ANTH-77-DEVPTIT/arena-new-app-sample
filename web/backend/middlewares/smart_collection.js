@@ -137,7 +137,7 @@ const update_order_product = async ({ shop, accessToken, id, productIDs, sort_or
       })
     }
     if (sort_order) {
-      endpoint += `?sort_order=${sort_order}`
+      endpoint += `sort_order=${sort_order}`
     }
 
     return await apiCaller({ shop, accessToken, method: 'PUT', endpoint })

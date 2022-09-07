@@ -8,6 +8,7 @@ import ProductCollectMiddleware from '../middlewares/product_collect.js'
 import ProductCollectionMiddleware from '../middlewares/product_collection.js'
 import CustomCollectionMiddleware from '../middlewares/custom_collection.js'
 import SmartCollectionMiddleware from '../middlewares/smart_collection.js'
+import OrderMiddleware from '../middlewares/order/order.js'
 
 export default {
   submit: async (req, res) => {
@@ -125,7 +126,7 @@ export default {
       //   },
       // }
 
-      let productIDs = '7834751664382,7847646822654,7834766737662,7834417856766,7834417463550'
+      // let productIDs = '7834751664382,7847646822654,7834766737662,7834417856766,7834417463550'
 
       // const data = await SmartCollectionMiddleware.findById({
       //   shop,
@@ -137,21 +138,61 @@ export default {
       //   id: 401690099966,
       // })
 
-      const data = await SmartCollectionMiddleware.update_order_product({
+      // const data = await SmartCollectionMiddleware.update_order_product({
+      //   shop,
+      //   accessToken,
+      //   // since_id: 401711268094,
+      //   // product_id: 7815317356798,
+      //   // ids: '401711563006,401710678270,400695492862',
+      //   // customer_id,
+      //   id: 401690099966,
+      //   productIDs,
+      //   data: {},
+      //   // data: JSON.parse(result),
+      //   // data: result,
+      //   // query,
+      //   // data: result,
+      //   // limit: 1,
+      // })
+
+      let result = {
+        order: {
+          // note: 'san pham nhieu sua it duong!!',
+          // note_attributes: [
+          //   {
+          //     name: 'color',
+          //     value: 'white',
+          //   },
+          // ],
+          // phone: '+15145556677',
+          // buyer_accepts_marketing: true,
+          line_items: [
+            {
+              title: 'duong thuong dau',
+              grams: 1200,
+              price: 1200,
+              variant_id: 43380747141374,
+              quantity: 3,
+            },
+          ],
+          email: 'buyer@gmail.com',
+          status: 'fulfilled',
+          fulfillment_status: 'fulfilled',
+          transactions: [
+            {
+              kind: 'sale',
+              status: 'success',
+              amount: 12332,
+            },
+          ],
+        },
+      }
+
+      const data = await OrderMiddleware.re_open_order({
         shop,
         accessToken,
-        // since_id: 401711268094,
-        // product_id: 7815317356798,
-        // ids: '401711563006,401710678270,400695492862',
-        // customer_id,
-        id: 401690099966,
-        productIDs,
         data: {},
-        // data: JSON.parse(result),
-        // data: result,
-        // query,
-        // data: result,
-        // limit: 1,
+        id: 4908515328254,
       })
 
       return ResponseHandler.success(res, data)
