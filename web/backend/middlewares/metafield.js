@@ -44,8 +44,10 @@ const findById = async ({ shop, accessToken, resource, metafield_id }) => {
 }
 
 const create = async ({ shop, accessToken, resource, data }) => {
+  console.log('🚀 ~ file: metafield.js ~ line 47 ~ create ~ resource', resource)
   try {
     validateParams({ shop, accessToken, data })
+    // endpoint: `/products/7834737737982/metafields.json`,
 
     return await apiCaller({
       shop,
@@ -53,6 +55,22 @@ const create = async ({ shop, accessToken, resource, data }) => {
       endpoint: `${resource || ''}metafields.json`,
       method: 'POST',
       data,
+    })
+  } catch (error) {
+    throw error
+  }
+}
+
+const create_metafields = async ({ shop, accessToken, data }) => {
+  try {
+    validateParams({ shop, accessToken, data })
+
+    return await apiCaller({
+      shop,
+      accessToken,
+      method: 'POST',
+      data,
+      endpoint: `metafields.json`,
     })
   } catch (error) {
     throw error
@@ -95,6 +113,7 @@ const MetafieldMiddleware = {
   find,
   findById,
   create,
+  create_metafields,
   update,
   delete: _delete,
 }

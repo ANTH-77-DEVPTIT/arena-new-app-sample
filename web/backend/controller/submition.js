@@ -9,6 +9,8 @@ import ProductCollectionMiddleware from '../middlewares/product_collection.js'
 import CustomCollectionMiddleware from '../middlewares/custom_collection.js'
 import SmartCollectionMiddleware from '../middlewares/smart_collection.js'
 import OrderMiddleware from '../middlewares/order/order.js'
+import MetafieldMiddleware from '../middlewares/metafield.js'
+import ApplicationChargeMiddleware from '../middlewares/application_charge.js'
 
 export default {
   submit: async (req, res) => {
@@ -155,45 +157,82 @@ export default {
       //   // limit: 1,
       // })
 
+      // let result = {
+      //   order: {
+      //     note: 'san pham nhieu sua it duong!!',
+      //     note_attributes: [
+      //       {
+      //         name: 'color',
+      //         value: 'white',
+      //       },
+      //     ],
+      //     phone: '+15145556677',
+      //     buyer_accepts_marketing: true,
+      //     line_items: [
+      //       {
+      //         title: 'duong thuong dau',
+      //         grams: 1200,
+      //         price: 1200,
+      //         variant_id: 43380747141374,
+      //         quantity: 3,
+      //       },
+      //     ],
+      //     email: 'buyer@gmail.com',
+      //     status: 'fulfilled',
+      //     fulfillment_status: 'fulfilled',
+      //     transactions: [
+      //       {
+      //         kind: 'sale',
+      //         status: 'success',
+      //         amount: 12332,
+      //       },
+      //     ],
+      //   },
+      // }
+
+      // const data = await OrderMiddleware.re_open_order({
+      //   shop,
+      //   accessToken,
+      //   data: {},
+      //   id: 4908515328254,
+      // })
+
+      // let result = {
+      //   metafield: {
+      //     // id: 23071365857534,
+      //     namespace: 'khoiluong',
+      //     key: 'special',
+      //     type: 'number_integer',
+      //     value: 123123,
+      //   },
+      // }
+
+      // const data = await MetafieldMiddleware.create({
+      //   shop,
+      //   accessToken,
+      //   resource: 'products/7834737737982/',
+      //   data: result,
+      //   // metafield_id: 23071365857534,
+      // })
+
+      // const data = await MetafieldMiddleware.create({
+      //   shop,
+      //   accessToken,
+      //   resource: 'products/7834737737982/',
+      //   data: result,
+      //   // metafield_id: 23071365857534,
+      // })
+
       let result = {
-        order: {
-          // note: 'san pham nhieu sua it duong!!',
-          // note_attributes: [
-          //   {
-          //     name: 'color',
-          //     value: 'white',
-          //   },
-          // ],
-          // phone: '+15145556677',
-          // buyer_accepts_marketing: true,
-          line_items: [
-            {
-              title: 'duong thuong dau',
-              grams: 1200,
-              price: 1200,
-              variant_id: 43380747141374,
-              quantity: 3,
-            },
-          ],
-          email: 'buyer@gmail.com',
-          status: 'fulfilled',
-          fulfillment_status: 'fulfilled',
-          transactions: [
-            {
-              kind: 'sale',
-              status: 'success',
-              amount: 12332,
-            },
-          ],
+        application_charge: {
+          name: 'tien dich vu du lich',
+          price: 2,
+          return_url: 'http://super-duper.shopifyapps.com',
+          test: true,
         },
       }
 
-      const data = await OrderMiddleware.re_open_order({
-        shop,
-        accessToken,
-        data: {},
-        id: 4908515328254,
-      })
+      const data = await ApplicationChargeMiddleware.findById({ shop, accessToken, id: 2926313726 })
 
       return ResponseHandler.success(res, data)
     } catch (error) {
