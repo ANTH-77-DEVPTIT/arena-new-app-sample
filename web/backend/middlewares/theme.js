@@ -11,6 +11,7 @@ const getMain = async ({ shop, accessToken }) => {
       endpoint: `themes.json`,
     })
     themes = themes.themes
+    console.log('🚀 ~ file: theme.js ~ line 14 ~ getMain ~ themes', themes)
 
     let theme = themes.find((item) => item.role === 'main')
     if (!theme) {
@@ -50,6 +51,7 @@ const findById = async ({ shop, accessToken, id }) => {
     throw error
   }
 }
+
 const create = async ({ shop, accessToken, data }) => {
   try {
     validateParams({ shop, accessToken, data })

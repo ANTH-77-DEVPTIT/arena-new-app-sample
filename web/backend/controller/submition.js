@@ -10,7 +10,10 @@ import CustomCollectionMiddleware from '../middlewares/custom_collection.js'
 import SmartCollectionMiddleware from '../middlewares/smart_collection.js'
 import OrderMiddleware from '../middlewares/order/order.js'
 import MetafieldMiddleware from '../middlewares/metafield.js'
-import ApplicationChargeMiddleware from '../middlewares/application_charge.js'
+import ApplicationChargeMiddleware from '../middlewares/billing_application.js'
+import InventoryMiddleware from '../middlewares/inventory.js'
+import ThemeMiddleware from '../middlewares/theme.js'
+import BlogMiddleware from '../middlewares/online_store.js'
 
 export default {
   submit: async (req, res) => {
@@ -224,15 +227,18 @@ export default {
       // })
 
       let result = {
-        application_charge: {
-          name: 'tien dich vu du lich',
-          price: 2,
-          return_url: 'http://super-duper.shopifyapps.com',
-          test: true,
+        page: {
+          title: 'My Page',
+          body_html:
+            '<h2>Warranty</h2><p>Returns accepted if we receive items <strong>30 days after purchase</strong>.</p>',
         },
       }
-
-      const data = await ApplicationChargeMiddleware.findById({ shop, accessToken, id: 2926313726 })
+      const data = await BlogMiddleware.create_page({
+        shop,
+        accessToken,
+        data: result,
+        // id: 88636752126,
+      })
 
       return ResponseHandler.success(res, data)
     } catch (error) {

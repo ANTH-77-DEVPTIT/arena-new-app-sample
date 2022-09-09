@@ -22,7 +22,7 @@ const APP_BILLINGS = [
   },
   {
     id: 2001,
-    type: 'recurring_application_charge',
+    type: 'recurring_application_charge', //phí ứng dụng định kỳ
     name: 'Recurring Application Charge - BASIC',
     plan: 'BASIC',
     price: 0,

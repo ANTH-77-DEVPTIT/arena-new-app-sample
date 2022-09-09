@@ -4,6 +4,9 @@ import ThemeMiddleware from './theme.js'
 
 const NAME = 'CDN_THEME (DO NOT DELETE)'
 
+// cdn: content delivery network(mang luoi phan phoi noi dung)
+//cdntheme: mang luoi phan phoi noi dung la theme
+
 const load = async ({ shop, accessToken }) => {
   try {
     validateParams({ shop, accessToken })
