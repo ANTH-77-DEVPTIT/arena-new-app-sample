@@ -14,6 +14,7 @@ export const generateGraphqlInput = (input) => {
 }
 
 const graphqlCaller = async ({ shop, accessToken, query, variables }) => {
+  console.log('🚀 ~ file: graphqlCaller.js ~ line 17 ~ graphqlCaller ~ query', query)
   try {
     //query nhan vao duoi dang template string ``
     validateParams({ shop, accessToken, query })
@@ -21,7 +22,6 @@ const graphqlCaller = async ({ shop, accessToken, query, variables }) => {
     //GraphQL lay ra url cua cua hang  va accessToken cho cua hang do
     //truyen vao shop and accessToken
     const client = new Shopify.Clients.Graphql(shop, accessToken)
-    console.log('🚀 ~ file: graphqlCaller.js ~ line 21 ~ graphqlCaller ~ client', client)
 
     let res =
       query && variables
