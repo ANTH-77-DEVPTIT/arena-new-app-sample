@@ -36,6 +36,10 @@ export default function App(props) {
             label: 'Test Api',
             pathname: '/test_api',
           },
+          {
+            label: 'Test Api GraphQl',
+            pathname: '/test_graphQl',
+          },
         ]}
         secondaryActions={[
           {

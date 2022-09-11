@@ -30,6 +30,7 @@ import customerRoute from './backend/routes/admin/customer.js'
 import customerAddressRoute from './backend/routes/admin/customer_address.js'
 import CustomerSavedSearchRoute from './backend/routes/admin/customer_saved_search.js'
 import orderRoute from './backend/routes/admin/order/order.js'
+import submitionGraphQLRoute from './backend/routes/admin/graphQl/submition.js'
 
 const USE_ONLINE_TOKENS = false
 const TOP_LEVEL_OAUTH_COOKIE = 'shopify_top_level_oauth'
@@ -138,6 +139,8 @@ export async function createServer(
   orderRoute(app)
   billingRoute(app)
   submitionRoute(app)
+  //graphql router
+  submitionGraphQLRoute(app)
   // -------------------------------------------
 
   // All endpoints after this point will have access to a request.body
